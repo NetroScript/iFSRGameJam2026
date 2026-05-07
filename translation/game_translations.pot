@@ -1,0 +1,31 @@
+# LANGUAGE translation for iFSRGameJam2026 for the following files:
+# res://scenes/gui/MainMenu.tscn
+#
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: iFSRGameJam2026\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+
+#: scenes/gui/MainMenu.tscn
+msgid "Start"
+msgstr ""
+
+#: scenes/gui/MainMenu.tscn
+msgid "Options"
+msgstr ""
+
+#: scenes/gui/MainMenu.tscn
+msgid "Credits"
+msgstr ""
+
+#: scenes/gui/MainMenu.tscn
+msgid "Exit"
+msgstr ""
+
+msgid "iFSRGameJam2026"
+msgstr ""
