@@ -444,8 +444,8 @@ func restore_default_settings() -> void:
 	for bus_index in AudioServer.get_bus_count():
 		var bus_name := AudioServer.get_bus_name(bus_index)
 
-		audio_bus_volumes[bus_name] = 1.0
-		audio_bus_mutes[bus_name] = false
+		set_audio_bus_volume(bus_name, 1.0)
+		set_audio_bus_muted(bus_name, false)
 
 	apply_all_settings()
 	unsaved_settings_changed.emit(has_unsaved_settings())

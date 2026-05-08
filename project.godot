@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="iFSRGameJam2026"
-run/main_scene="uid://wckarbcnw7jo"
+run/main_scene="uid://xc7tlwt70oxa"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 

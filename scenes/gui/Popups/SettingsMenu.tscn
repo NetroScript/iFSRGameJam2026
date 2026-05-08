@@ -4,6 +4,8 @@
 [ext_resource type="Script" uid="uid://edx4fjtvaouv" path="res://scripts/gui/AudioBusSettingsBuilder.gd" id="2_tq5p4"]
 [ext_resource type="Script" uid="uid://cssxbioe67kea" path="res://scripts/gui/SettingsSaveControls.gd" id="3_d7b0y"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4pgql"]
+
 [sub_resource type="GDScript" id="GDScript_h0jln"]
 script/source = "extends Button
 
@@ -12,22 +14,12 @@ func _pressed() -> void:
 	GState.settings_open = false
 "
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4pgql"]
-
 [node name="SettingsMenu" type="PanelContainer" unique_id=1023722682]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="Close" type="Button" parent="." unique_id=906284031]
-custom_minimum_size = Vector2(30, 30)
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 0
-text = "X"
-script = SubResource("GDScript_h0jln")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=2053667778]
 layout_mode = 2
@@ -50,6 +42,7 @@ layout_mode = 2
 
 [node name="CheckButton" type="CheckButton" parent="MarginContainer/VBoxContainer" unique_id=413098250]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 button_pressed = true
 text = "Enable V-Sync"
 script = ExtResource("1_iq6gb")
@@ -79,8 +72,19 @@ script = ExtResource("3_d7b0y")
 
 [node name="Restore" type="Button" parent="MarginContainer/VBoxContainer/SaveControls" unique_id=8484543]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "Restore Default Settings"
 
 [node name="Save" type="Button" parent="MarginContainer/VBoxContainer/SaveControls" unique_id=1672118383]
 layout_mode = 2
+mouse_default_cursor_shape = 2
 text = "Save"
+
+[node name="Close" type="Button" parent="MarginContainer" unique_id=906284031]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+mouse_default_cursor_shape = 2
+text = "X"
+script = SubResource("GDScript_h0jln")
