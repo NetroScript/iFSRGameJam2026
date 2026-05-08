@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dmfok7lqac1ds"]
+
+[ext_resource type="Script" uid="uid://cyb6gscq8yxi5" path="res://tmp/tmp_scene.gd" id="1_22jtm"]
+[ext_resource type="PackedScene" uid="uid://cvor5dmn2lje5" path="res://objects/food_resource/food_resource.tscn" id="1_dihx3"]
+[ext_resource type="PackedScene" uid="uid://b3fgi2u127m3m" path="res://objects/ant_hill/ant_hill.tscn" id="2_nfwpx"]
+[ext_resource type="Resource" uid="uid://cfi8cmlcclgej" path="res://objects/food/ice_cream.tres" id="4_4qunm"]
+
+[node name="TmpScene" type="Node2D" unique_id=369819177]
+script = ExtResource("1_22jtm")
+
+[node name="AntHill" parent="." unique_id=92062608 instance=ExtResource("2_nfwpx")]
+unique_name_in_owner = true
+position = Vector2(-328.99997, -116.99999)
+scale = Vector2(10, 10)
+start_resources = 300.0
+max_resources = 300.0
+drain_rate = 30.0
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=493425930]
+
+[node name="FoodResource" parent="." unique_id=982183574 instance=ExtResource("1_dihx3")]
+unique_name_in_owner = true
+position = Vector2(157.4249, -83.60451)
+food = ExtResource("4_4qunm")
+max_chunks = 20
+
+[node name="Timer" type="Timer" parent="." unique_id=2049690761]
+unique_name_in_owner = true
+
+[editable path="FoodResource"]
