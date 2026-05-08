@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://da7q2hlv4ol03"]
+
+[ext_resource type="Script" uid="uid://8pvllssfg52c" path="res://scripts/state/GStateBooleanSetting.gd" id="1_iq6gb"]
+[ext_resource type="Script" uid="uid://edx4fjtvaouv" path="res://scripts/gui/AudioBusSettingsBuilder.gd" id="2_tq5p4"]
+[ext_resource type="Script" uid="uid://cssxbioe67kea" path="res://scripts/gui/SettingsSaveControls.gd" id="3_d7b0y"]
+
+[sub_resource type="GDScript" id="GDScript_h0jln"]
+script/source = "extends Button
+
+func _pressed() -> void:
+	GState.store_to_file()
+	GState.settings_open = false
+"
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4pgql"]
+
+[node name="SettingsMenu" type="PanelContainer" unique_id=1023722682]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Close" type="Button" parent="." unique_id=906284031]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+text = "X"
+script = SubResource("GDScript_h0jln")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=2053667778]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=640790532]
+layout_mode = 2
+
+[node name="Graphics" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1202203762]
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+text = "Graphics"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=1710128864]
+layout_mode = 2
+
+[node name="CheckButton" type="CheckButton" parent="MarginContainer/VBoxContainer" unique_id=413098250]
+layout_mode = 2
+button_pressed = true
+text = "Enable V-Sync"
+script = ExtResource("1_iq6gb")
+selected_gstate_property = "vsync_enabled"
+
+[node name="HSeparator2" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=803528775]
+layout_mode = 2
+
+[node name="Audio" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1879298247]
+layout_mode = 2
+theme_type_variation = &"HeaderMedium"
+text = "Audio"
+horizontal_alignment = 1
+script = ExtResource("2_tq5p4")
+
+[node name="HSeparator3" type="HSeparator" parent="MarginContainer/VBoxContainer" unique_id=835556474]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/separator = SubResource("StyleBoxEmpty_4pgql")
+
+[node name="SaveControls" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1224934869]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 20
+alignment = 2
+script = ExtResource("3_d7b0y")
+
+[node name="Restore" type="Button" parent="MarginContainer/VBoxContainer/SaveControls" unique_id=8484543]
+layout_mode = 2
+text = "Restore Default Settings"
+
+[node name="Save" type="Button" parent="MarginContainer/VBoxContainer/SaveControls" unique_id=1672118383]
+layout_mode = 2
+text = "Save"
