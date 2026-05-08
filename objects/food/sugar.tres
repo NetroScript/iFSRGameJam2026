@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="Food" format=3 uid="uid://2finpia0gf4c"]
+
+[ext_resource type="Script" uid="uid://b6ui0t4vvd65o" path="res://scripts/food.gd" id="1_1wgjq"]
+
+[resource]
+script = ExtResource("1_1wgjq")
+name = "Sugar"
+calories = 10.0
+metadata/_custom_type_script = "uid://b6ui0t4vvd65o"
