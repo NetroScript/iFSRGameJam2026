@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://drpw00y8jdltm"]
+
+[ext_resource type="Texture2D" uid="uid://nk270mdy3ndb" path="res://assets/images/ant/Ant_Spritesheet.png" id="1_b3u0h"]
+[ext_resource type="Script" uid="uid://fvw7ehgfu312" path="res://scripts/entities/Ant.gd" id="1_g32q3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tj6l7"]
+size = Vector2(560, 750)
+
+[node name="Ant" type="Node2D" unique_id=312714327]
+script = ExtResource("1_g32q3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1972251437]
+position = Vector2(1.9999847, 30.5)
+shape = SubResource("RectangleShape2D_tj6l7")
+
+[node name="MandibleLeft" type="Polygon2D" parent="." unique_id=1081616577]
+position = Vector2(1, -207)
+texture = ExtResource("1_b3u0h")
+polygon = PackedVector2Array(-48.656673, -75.61604, -19.712002, -43.624557, -34.5108, -2.0574036, -69.98433, -31.00206)
+uv = PackedVector2Array(166.78314, -0.1342411, 195.72781, 31.857231, 180.92902, 73.42439, 145.45549, 44.47972)
+
+[node name="MandibleRight" type="Polygon2D" parent="." unique_id=1272558269]
+position = Vector2(1, -207)
+rotation = 3.1415927
+scale = Vector2(1, -1)
+texture = ExtResource("1_b3u0h")
+polygon = PackedVector2Array(-48.656673, -75.61604, -19.712002, -43.624557, -34.5108, -2.0574036, -69.98433, -31.00206)
+uv = PackedVector2Array(166.78314, -0.1342411, 195.72781, 31.857231, 180.92902, 73.42439, 145.45549, 44.47972)
+
+[node name="TopLegLeft" type="Polygon2D" parent="." unique_id=1619623606]
+texture = ExtResource("1_b3u0h")
+polygon = PackedVector2Array(-40.994522, -0.58112144, -14.407518, -1.4979153, -26.631426, -28.08492, -172.72575, -258.52588, -200.53954, -247.9758, -131.48454, -83.970146)
+uv = PackedVector2Array(211.24808, 248.7842, 237.83508, 247.8674, 225.61118, 221.2804, 79.516846, -9.160561, 51.703064, 1.3895111, 120.75806, 165.39517)
+
+[node name="TopLegRight" type="Polygon2D" parent="." unique_id=2081564755]
+rotation = 3.1415927
+scale = Vector2(1, -1)
+texture = ExtResource("1_b3u0h")
+polygon = PackedVector2Array(-40.994522, -0.58112144, -14.407518, -1.4979153, -26.631426, -28.08492, -172.72575, -258.52588, -200.53954, -247.9758, -131.48454, -83.970146)
+uv = PackedVector2Array(211.24808, 248.7842, 237.83508, 247.8674, 225.61118, 221.2804, 79.516846, -9.160561, 51.703064, 1.3895111, 120.75806, 165.39517)
+
+[node name="MiddleLegLeft" type="Polygon2D" parent="." unique_id=1141026000]
+texture = ExtResource("1_b3u0h")
+polygon = PackedVector2Array(-25.497055, 7.1350517, -168.54022, 4.1544304, -276.91104, 73.49345, -253.26224, 97.14225, -151.55101, 31.478619, -14.020523, 37.90742)
+uv = PackedVector2Array(236.97087, 248.90259, 93.927704, 245.92197, -14.443138, 315.261, 9.205681, 338.9098, 110.91691, 273.24615, 248.4474, 279.67496)
+
+[node name="MiddleLegRight" type="Polygon2D" parent="." unique_id=802906057]
+rotation = 3.1415927
+scale = Vector2(1, -1)
+texture = ExtResource("1_b3u0h")
+polygon = PackedVector2Array(-25.497055, 7.1350517, -168.54022, 4.1544304, -276.91104, 73.49345, -253.26224, 97.14225, -151.55101, 31.478619, -14.020523, 37.90742)
+uv = PackedVector2Array(236.97087, 248.90259, 93.927704, 245.92197, -14.443138, 315.261, 9.205681, 338.9098, 110.91691, 273.24615, 248.4474, 279.67496)
+
+[node name="BottomLegLeft" type="Polygon2D" parent="." unique_id=2001372737]
+position = Vector2(0, 28)
+texture = ExtResource("1_b3u0h")
+polygon = PackedVector2Array(0.4152317, 17.71161, -23.298363, -7.7916517, -163.16238, 127.77497, -178.98752, 233.27568, -155.77737, 309.23615, -122.01714, 298.6861, -143.11728, 224.83563, -105.13702, 123.55494)
+uv = PackedVector2Array(252.93329, 302.49707, 229.2197, 276.9938, 89.35565, 412.56042, 73.53052, 518.06116, 96.74066, 594.0216, 130.50092, 583.47156, 109.40076, 509.6211, 147.38104, 408.3404)
+
+[node name="BottomLegRight" type="Polygon2D" parent="." unique_id=565269954]
+position = Vector2(0, 28)
+rotation = 3.1415927
+scale = Vector2(1, -1)
+texture = ExtResource("1_b3u0h")
+polygon = PackedVector2Array(0.4152317, 17.71161, -23.298363, -7.7916517, -163.16238, 127.77497, -178.98752, 233.27568, -155.77737, 309.23615, -122.01714, 298.6861, -143.11728, 224.83563, -105.13702, 123.55494)
+uv = PackedVector2Array(252.93329, 302.49707, 229.2197, 276.9938, 89.35565, 412.56042, 73.53052, 518.06116, 96.74066, 594.0216, 130.50092, 583.47156, 109.40076, 509.6211, 147.38104, 408.3404)
+
+[node name="Body" type="Polygon2D" parent="." unique_id=1684792370]
+texture = ExtResource("1_b3u0h")
+polygon = PackedVector2Array(-3.0496206, -260.48627, -60.52333, -239.44678, -73.35518, -74.72309, -39.484894, -22.380335, -38.458588, 19.185478, -21.0112, 52.02758, -70.27168, 88.97494, -99.009125, 154.6578, -81.05162, 264.47342, 0.027375221, 306.0392, 69.817505, 269.60928, 103.17276, 153.63559, 60.582306, 77.17492, 20.042816, 53.569633, 42.108612, 19.701193, 44.161255, -25.456705, 74.95355, -74.20568, 58.53421, -249.18982)
+uv = PackedVector2Array(278.56094, -7.707321, 221.08723, 13.332161, 208.25539, 178.05585, 242.12567, 230.3986, 243.15198, 271.96442, 260.59937, 304.80652, 211.33888, 341.75388, 182.60144, 407.43674, 200.55894, 517.2524, 281.63794, 558.8182, 351.42807, 522.38824, 384.78333, 406.41452, 342.19287, 329.95386, 301.65338, 306.34857, 323.71918, 272.48013, 325.77182, 227.32224, 356.56412, 178.57326, 340.14478, 3.5891113)
+
+[node name="AntennaLeft" type="Polygon2D" parent="." unique_id=1442622357]
+position = Vector2(1, -207)
+texture = ExtResource("1_b3u0h")
+polygon = PackedVector2Array(-6.5515137, 10.814621, -15.484375, -89.8289, -135.78018, -87.44681, -99.45325, 20.938522)
+uv = PackedVector2Array(121.486115, 231.15843, 112.55325, 130.51491, -7.7425537, 132.897, 28.584381, 241.28233)
+
+[node name="AntennaRight" type="Polygon2D" parent="." unique_id=1433231279]
+position = Vector2(1, -207)
+rotation = 3.1415927
+scale = Vector2(1, -1)
+texture = ExtResource("1_b3u0h")
+polygon = PackedVector2Array(-6.5515137, 10.814621, -15.484375, -89.8289, -135.78018, -87.44681, -99.45325, 20.938522)
+uv = PackedVector2Array(121.486115, 231.15843, 112.55325, 130.51491, -7.7425537, 132.897, 28.584381, 241.28233)
