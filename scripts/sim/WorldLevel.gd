@@ -141,7 +141,8 @@ func _ready() -> void:
 	_recreate_world()
 	_setup_world_camera()
 	if is_instance_valid(ant_hill) and is_instance_valid(score_display):
-		score_display.setup_progressbar(ant_hill)
+		if not Engine.is_editor_hint():
+			score_display.setup_progressbar(ant_hill)
 	Gamestate.start_run()
 
 func _notification(what: int) -> void:
