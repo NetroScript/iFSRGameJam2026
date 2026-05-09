@@ -5,12 +5,14 @@ var world: World
 
 var ants: Array[SimAnt]
 
+const NEST_POS := Vector2(400, 300)
+
 func _ready():
 	world.init()
 
-	for y in range(100):
-		world.put_food(world.nest.x + 20, y, 0)
-		world.put_food(world.nest.x - 20, y, 0)
+	var food = Food.new()
+	food.size = Vector2(50, 200)
+	#world.add_food(food, NEST_POS, 
 
 	ants.resize(20)
 	for i in range(ants.size()):
@@ -28,14 +30,14 @@ func _draw():
 		for y in range(world.size.y):
 			var color = Color(
 				world.phero_at(x, y, World.Pheromone.Food) / float(World.PHERO_MAX),
-				0 if world.food_at(x, y) == World.NO_FOOD else 1,
+				0 if world.food_at(x, y) == World.ITEM_NONE else 1,
 				world.phero_at(x, y, World.Pheromone.Home) / float(World.PHERO_MAX),
 			)
 			draw_rect(Rect2(10*x, 10*y, 10, 10), color)
 	for ant in ants:
 		draw_rect(
 			Rect2(10*ant.pos.x, 10*ant.pos.y, 10, 10),
-			Color(0.5, 0.5 ,0.5) if ant.food_id == World.NO_FOOD else Color.WHITE
+			Color(0.5, 0.5 ,0.5) if ant.food_id == World.ITEM_NONE else Color.WHITE
 		)
 
 var redraw: int = 0

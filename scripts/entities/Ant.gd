@@ -419,7 +419,7 @@ func _on_target_reached() -> void:
 	_sim_ant.step(_world, _get_player_control_direction())
 	_grid_cell = _sim_ant.pos
 
-	if carried_food_id != World.NO_FOOD and _sim_ant.food_id == World.NO_FOOD:
+	if carried_food_id != World.ITEM_NONE and _sim_ant.food_id == World.ITEM_NONE:
 		_deposit_food(carried_food_id)
 	
 	_choose_next_target()

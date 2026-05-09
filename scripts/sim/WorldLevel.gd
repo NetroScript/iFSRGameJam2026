@@ -469,11 +469,10 @@ func _update_grid_data_texture() -> void:
 		_grid_data_timestamp_ms = float(Time.get_ticks_msec())
 		for y in range(world.size.y):
 			for x in range(world.size.x):
-				for field in range(World.IntField.Count):
-					var data_index := (y * world.size.x + x) * World.IntField.Count + field
-					var texture_y := y * World.IntField.Count + field
-					var pixel_index := texture_y * width + x
-					_grid_data_bytes.encode_float(pixel_index * 4, float(world.int_data[data_index]))
+				for phero in [World.IntField.PheroHome, World.IntField.PheroFood]:
+					var texture_y = y * 2 + phero
+					var pixel_index = texture_y * width + x
+					_grid_data_bytes.encode_float(pixel_index * 4, float(world.phero_at(x, y, phero)))
 
 		_grid_data_image.set_data(width, height, false, Image.FORMAT_RF, _grid_data_bytes)
 

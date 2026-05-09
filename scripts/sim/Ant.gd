@@ -5,7 +5,7 @@ var pos:     Vector2i
 
 var goal        := World.Pheromone.Food
 var leave_trail := true
-var food_id     := World.NO_FOOD
+var food_id     := World.ITEM_NONE
 var start_t: int
 
 const PHERO_MAX := World.PHERO_MAX
@@ -32,20 +32,19 @@ func step(world: World, steering: Vector2):
 
 	# Update state.
 	var phero_stren = PHERO_MAX - 2*(Time.get_ticks_msec() - start_t)
-
-	if pos == world.nest: # Returned to nest
-		food_id     = World.NO_FOOD
+	var item        = world.get_int(pos.x, pos.y, World.IntField.Item)
+	
+	if item == World.ITEM_NEST: # Returned to nest
+		food_id     = World.ITEM_NONE
 		goal        = World.Pheromone.Food
 		leave_trail = true
 		heading     = Vector2.ZERO
 		start_t     = Time.get_ticks_msec()
 		phero_stren = PHERO_MAX
-
-	if food_id == World.NO_FOOD:
-		var food = world.food_at(pos.x, pos.y)
-		if food != World.NO_FOOD: # Found food
-			food_id = food
-			world.put_food(pos.x, pos.y, World.NO_FOOD)
+	elif food_id == World.ITEM_NONE:
+		if item != World.ITEM_NONE: # Found food
+			food_id = item
+			#world.put_food(pos.x, pos.y, World.NO_FOOD)
 			goal        = World.Pheromone.Home
 			leave_trail = true
 			heading     = -heading

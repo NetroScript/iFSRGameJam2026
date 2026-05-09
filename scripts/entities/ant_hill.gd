@@ -30,6 +30,8 @@ signal depleted
 ## The minimum distance and the maximum distance (in grid cells) in which the ants should be spawned from the ant hill
 @export var spawn_distance_range: Vector2i = Vector2i(5, 100)
 
+@export var size: Vector2
+
 @onready var resource_bar: ProgressBar = %ResourceBar
 @onready var resource_timer: Timer = %ResourceTimer
 # Current number of resources
@@ -109,7 +111,7 @@ func _spawn_start_ants() -> void:
 		return
 
 	_start_ants_spawned = true
-	world.nest = world_level.world_position_to_cell(global_position)
+	world.place_nest(Rect2(global_position, size), world_level)
 	var spawn_count := _rng.randi_range(mini(spawn_range.x, spawn_range.y), maxi(spawn_range.x, spawn_range.y))
 	for i in range(spawn_count):
 		var ant := ant_scene.instantiate() as Ant

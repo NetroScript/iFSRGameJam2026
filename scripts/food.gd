@@ -9,3 +9,5 @@ extends Resource
 @export var name: String
 ## Calories of one unit of the food. More = better
 @export var calories: float
+## Extent in grid cells
+@export var size: Vector2
