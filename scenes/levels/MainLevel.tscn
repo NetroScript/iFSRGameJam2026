@@ -103,6 +103,7 @@ texture = ExtResource("2_7q8md")
 [node name="AntHill" parent="." unique_id=92062608 node_paths=PackedStringArray("world_level") instance=ExtResource("5_8gv0l")]
 unique_name_in_owner = true
 z_index = -1
+start_resources = 150.0
 max_resources = 1000.0
 tick_rate = 0.5
 drain_rate = 10.0
