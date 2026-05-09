@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://j20454kqnp7o"]
+
+[ext_resource type="FontFile" uid="uid://dhaovcnmp8fya" path="res://assets/fonts/Mitr/Mitr-Bold.ttf" id="1_7mnsy"]
+
+[sub_resource type="GDScript" id="GDScript_7mnsy"]
+script/source = "extends Button
+
+func _pressed() -> void:
+	GState.credits_open = false
+"
+
+[node name="Control" type="PanelContainer" unique_id=950053448]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="." unique_id=1580163453]
+layout_mode = 2
+theme_override_fonts/bold_font = ExtResource("1_7mnsy")
+theme_override_font_sizes/normal_font_size = 28
+theme_override_font_sizes/bold_font_size = 50
+bbcode_enabled = true
+text = "[center]
+[b]Credits[/b]
+
+Using the [url=https://github.com/cadsondemak/mitr]Mitr Font[/url] licensed under [url=https://github.com/cadsondemak/mitr/blob/master/OFL]SIL OFL 1.1[/url]
+
+Everything else was selfmade :)"
+
+[node name="Close" type="Button" parent="." unique_id=1797334782]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+offset_transform_enabled = true
+offset_transform_position = Vector2(-10, 10)
+offset_transform_visual_only = false
+mouse_default_cursor_shape = 2
+text = "X"
+script = SubResource("GDScript_7mnsy")

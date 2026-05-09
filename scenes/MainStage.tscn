@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://wckarbcnw7jo" path="res://scenes/gui/MainMenu.tscn" id="1_to7s8"]
 [ext_resource type="PackedScene" uid="uid://da7q2hlv4ol03" path="res://scenes/gui/Popups/SettingsMenu.tscn" id="2_p4jr8"]
 [ext_resource type="AudioStream" uid="uid://ut1b582uhv2v" path="res://assets/audio/music/Master.ogg" id="3_p4jr8"]
+[ext_resource type="PackedScene" uid="uid://j20454kqnp7o" path="res://scenes/gui/Popups/CreditsPage.tscn" id="3_qsygf"]
 [ext_resource type="AudioStream" uid="uid://jvb1dc48eu5v" path="res://assets/audio/music/04 734532__sachajulien__ants-with-contact-microphones.ogg" id="4_4ityg"]
 
 [sub_resource type="GDScript" id="GDScript_4ityg"]
@@ -26,8 +27,43 @@ func _update_open(open: bool, animation_duration: = 0.3) -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	var e := event as InputEventKey
 	
+	if e.pressed and e.keycode == KEY_ESCAPE and GState.settings_open:
+		GState.settings_open = false
+		get_viewport().set_input_as_handled()
+		return
+	
 	if e.pressed and e.keycode == KEY_O:
 		GState.settings_open = !GState.settings_open
+"
+
+[sub_resource type="GDScript" id="GDScript_8p6gt"]
+script/source = "extends MarginContainer
+
+func _ready() -> void:
+	GState.credits_open_changed.connect(_update_open)
+	_update_open(GState.credits_open, 0.0)
+
+func _update_open(open: bool, animation_duration: = 0.3) -> void:
+	if open:
+		offset_transform_scale = Vector2(0.00001, 0.00001)
+		show()
+		create_tween().tween_property(self, 'offset_transform_scale', Vector2(1.0,1.0), animation_duration)
+	else:
+		offset_transform_scale = Vector2(1.0,1.0)
+		var tween := create_tween()
+		tween.tween_property(self, 'offset_transform_scale', Vector2(0.0,0.0), animation_duration)
+		tween.tween_callback(hide)
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	var e := event as InputEventKey
+	
+	if e.pressed and e.keycode == KEY_ESCAPE and GState.credits_open:
+		GState.credits_open = false
+		get_viewport().set_input_as_handled()
+		return
+	
+	if e.pressed and e.keycode == KEY_C:
+		GState.credits_open = !GState.credits_open
 "
 
 [node name="MainStage" type="Node" unique_id=555776025]
@@ -58,6 +94,29 @@ script = SubResource("GDScript_4ityg")
 
 [node name="SettingsMenu" parent="CanvasLayer/Settings" unique_id=1023722682 instance=ExtResource("2_p4jr8")]
 layout_mode = 2
+
+[node name="Credits" type="MarginContainer" parent="CanvasLayer" unique_id=608955933]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+offset_transform_enabled = true
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+script = SubResource("GDScript_8p6gt")
+
+[node name="Control" parent="CanvasLayer/Credits" unique_id=950053448 instance=ExtResource("3_qsygf")]
+layout_mode = 2
+
+[node name="ScoreDisplay" parent="CanvasLayer" unique_id=1210247731 instance=ExtResource("3_adpbt")]
+visible = false
 
 [node name="MusicStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2040515234]
 stream = ExtResource("3_p4jr8")

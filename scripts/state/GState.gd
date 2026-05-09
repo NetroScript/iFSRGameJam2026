@@ -10,6 +10,7 @@ signal language_changed(value: LANGUAGES)
 signal fullscreen_changed(value: bool)
 signal vsync_enabled_changed(value: bool)
 signal settings_open_changed(value: bool)
+signal credits_open_changed(value: bool)
 signal paused_changed(value: bool)
 
 signal audio_bus_volume_changed(bus_name: String, value: float)
@@ -111,8 +112,22 @@ var settings_open: bool = false:
 			return
 
 		settings_open = value
+		if settings_open and credits_open:
+			credits_open = false
 		settings_open_changed.emit(value)
 		setting_changed.emit(&"settings_open", value)
+
+
+var credits_open: bool = false:
+	set(value):
+		if credits_open == value:
+			return
+
+		credits_open = value
+		if credits_open and settings_open:
+			settings_open = false
+		credits_open_changed.emit(value)
+		setting_changed.emit(&"credits_open", value)
 
 
 var paused: bool = false:
@@ -331,6 +346,7 @@ func get_valid_setting_names() -> PackedStringArray:
 		"default_settings",
 		"_saved_settings_snapshot",
 		"settings_open",
+		"credits_open",
 		"paused",
 	]
 
@@ -505,3 +521,11 @@ func _apply_paused(value: bool) -> void:
 		return
 
 	get_tree().paused = value
+
+
+# -------------------------------------------------------------------
+# Events
+# -------------------------------------------------------------------
+func _input(_event: InputEvent):
+	if Input.is_action_just_pressed("toggle_fullscreen"):
+		fullscreen = not fullscreen

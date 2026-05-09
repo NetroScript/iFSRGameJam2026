@@ -20,6 +20,13 @@ func _pressed() -> void:
 	GState.settings_open = true
 "
 
+[sub_resource type="GDScript" id="GDScript_e61bo"]
+script/source = "extends Button
+
+func _pressed() -> void:
+	GState.credits_open = true
+"
+
 [sub_resource type="GDScript" id="GDScript_jes8i"]
 script/source = "extends Button
 
@@ -76,6 +83,7 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Credits"
 flat = true
+script = SubResource("GDScript_e61bo")
 
 [node name="Exit" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer" unique_id=1523699152]
 layout_mode = 2

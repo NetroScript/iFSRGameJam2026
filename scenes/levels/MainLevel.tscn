@@ -38,7 +38,7 @@ shader_parameter/grid_data_color_full_cells = false
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3ijqg"]
 shader = ExtResource("6_dnftk")
 shader_parameter/line_colour = Color(1, 1, 1, 1)
-shader_parameter/line_thickness = 1
+shader_parameter/line_thickness = 1.0
 
 [sub_resource type="Resource" id="Resource_qb1ua"]
 script = ExtResource("8_fpd5e")
