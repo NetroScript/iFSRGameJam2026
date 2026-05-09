@@ -41,6 +41,7 @@ var nest_grid_coverage := 0.5:
 @onready var resource_timer: Timer = %ResourceTimer
 # Current number of resources
 @onready var resources: float = start_resources
+@onready var ant_hill_group: CanvasGroup = $AntHillGroup
 
 var _rng := RandomNumberGenerator.new()
 var _start_ants_spawned := false
@@ -135,7 +136,7 @@ func _spawn_start_ants() -> void:
 			continue
 
 		var spawn_position := _random_spawn_position()
-		get_parent().add_child(ant)
+		ant_hill_group.add_child(ant)
 		ant.global_position = spawn_position
 		ant.setup_grid_behavior(world_level, self)
 

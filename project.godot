@@ -29,6 +29,10 @@ Gamestate="*uid://jljonhqbk41q"
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[gui]
+
+theme/custom_font="uid://cxw1dm4silipo"
+
 [input]
 
 cam_up={
