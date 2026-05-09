@@ -113,6 +113,11 @@ var color_full_grid_cells_with_pheromones := true:
 @onready var world_camera: Camera2D = %WorldCamera
 @onready var default_ant_parent: Node = self
 
+@export_group("")
+@export var score_display: ScoreDisplay
+@export var ant_hill: AntHill
+
+
 var world: World
 var _grid_data_image: Image
 var _grid_data_texture: ImageTexture
@@ -135,6 +140,9 @@ func _ready() -> void:
 		ant_highlight = %AntHighlight
 	_recreate_world()
 	_setup_world_camera()
+	if is_instance_valid(ant_hill) and is_instance_valid(score_display):
+		if not Engine.is_editor_hint():
+			score_display.setup_progressbar(ant_hill)
 	Gamestate.start_run()
 
 func _notification(what: int) -> void:
