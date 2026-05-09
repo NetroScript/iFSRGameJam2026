@@ -1,4 +1,5 @@
 @tool
+class_name Ant
 extends Node2D
 
 @onready var bbox_area: Area2D = %BBoxArea

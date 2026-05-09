@@ -1,4 +1,4 @@
-class_name Ant extends Resource
+class_name SimAnt extends Resource
 
 var heading: Vector2
 var pos: Vector2i

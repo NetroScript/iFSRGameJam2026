@@ -3,12 +3,12 @@ extends Node2D
 @export
 var world: World
 
-var ants: Array[Ant]
+var ants: Array[SimAnt]
 
 func _ready():
 	world.init()
 	
-	var ant = Ant.new()
+	var ant = SimAnt.new()
 	ant.pos = Vector2i(55, 35)
 	ant.heading = Vector2(1, 0)
 	ant.phero = World.Pheromone.Food
@@ -29,7 +29,7 @@ func _draw():
 
 func _process(_delta: float):
 	if Time.get_ticks_msec() / 5000 > ants.size():
-		var ant = Ant.new()
+		var ant = SimAnt.new()
 		ant.pos = Vector2i(55, 35)
 		ant.phero = World.Pheromone.Food
 		ants.push_back(ant)
