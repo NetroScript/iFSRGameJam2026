@@ -62,10 +62,14 @@ func put_phero(x: int, y: int, phero: Pheromone, strength: int):
 	var new = Time.get_ticks_msec() - PHERO_MAX + strength
 	set_int(x, y, IntField.PheroBase + phero, max(current, new))
 
-func add_food(food: Food, origin: Vector2, level: WorldLevel):
-	food_items.push_back(food)
+func add_food(res: FoodResource, level: WorldLevel):
+	food_items.push_back(res.food)
+	var aabb := res.sprite_2d.get_rect()
 	put_item(
-		Rect2i(level.world_position_to_cell(origin), food.size / Vector2(level.cell_size)),
+		Rect2i(
+			level.world_position_to_cell(res.sprite_2d.to_global(aabb.position)),
+			aabb.size * res.sprite_2d.scale / Vector2(level.cell_size)
+		),
 		food_items.size() - 1,
 	)
 func place_nest(area: Rect2, level: WorldLevel):
