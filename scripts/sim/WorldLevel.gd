@@ -180,7 +180,7 @@ func _update_camera_keyboard_pan(delta: float) -> void:
 	if Engine.is_editor_hint() or not camera_controls_enabled or not is_instance_valid(world_camera):
 		return
 
-	var direction := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var direction := Input.get_vector("cam_left", "cam_right", "cam_up", "cam_down")
 	if direction == Vector2.ZERO:
 		return
 
