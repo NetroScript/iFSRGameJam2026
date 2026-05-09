@@ -98,6 +98,8 @@ var _selected_ants: Array[Ant] = []
 var _ant_original_parents: Dictionary[int, Node] = {}
 var _target_point: Node2D
 
+const _GRID_DATA_PHEROMONE_FIELD_COUNT := 2
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if ant_highlight == null and has_node("%AntHighlight"):
@@ -411,7 +413,7 @@ func _update_background_shader(update_grid_texture := false) -> void:
 	material.set_shader_parameter("grid_cell_size", Vector2(cell_size))
 	_set_background_shader_parameter(material, "grid_timestamp_ms", _grid_data_timestamp_ms, true)
 	material.set_shader_parameter("grid_phero_max", float(World.PHERO_MAX))
-	material.set_shader_parameter("grid_field_count", World.IntField.Count)
+	material.set_shader_parameter("grid_field_count", _GRID_DATA_PHEROMONE_FIELD_COUNT)
 	material.set_shader_parameter("show_grid_data", send_grid_data_to_background_shader)
 
 	if send_grid_data_to_background_shader and world != null:
@@ -456,7 +458,7 @@ func _update_grid_data_texture() -> void:
 		return
 
 	var width := world.size.x
-	var height := world.size.y * World.IntField.Count
+	var height := world.size.y * _GRID_DATA_PHEROMONE_FIELD_COUNT
 	if width <= 0 or height <= 0:
 		return
 
@@ -469,10 +471,12 @@ func _update_grid_data_texture() -> void:
 		_grid_data_timestamp_ms = float(Time.get_ticks_msec())
 		for y in range(world.size.y):
 			for x in range(world.size.x):
-				for phero in [World.IntField.PheroHome, World.IntField.PheroFood]:
-					var texture_y = y * 2 + phero
-					var pixel_index = texture_y * width + x
-					_grid_data_bytes.encode_float(pixel_index * 4, float(world.phero_at(x, y, phero)))
+				for phero in range(_GRID_DATA_PHEROMONE_FIELD_COUNT):
+					var texture_y := y * _GRID_DATA_PHEROMONE_FIELD_COUNT + phero
+					var pixel_index := texture_y * width + x
+					var field := World.IntField.PheroBase + phero
+					var data_index := (y * world.size.x + x) * World.IntField.Count + field
+					_grid_data_bytes.encode_float(pixel_index * 4, float(world.int_data[data_index]))
 
 		_grid_data_image.set_data(width, height, false, Image.FORMAT_RF, _grid_data_bytes)
 

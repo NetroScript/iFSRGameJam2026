@@ -119,3 +119,12 @@ scale = Vector2(1, -1)
 texture = ExtResource("1_b3u0h")
 polygon = PackedVector2Array(-6.5515137, 10.814621, -15.484375, -89.8289, -135.78018, -87.44681, -99.45325, 20.938522)
 uv = PackedVector2Array(121.486115, 231.15843, 112.55325, 130.51491, -7.7425537, 132.897, 28.584381, 241.28233)
+
+[node name="CarriedFood" type="TextureRect" parent="." unique_id=772539387]
+unique_name_in_owner = true
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+expand_mode = 1
+stretch_mode = 5
