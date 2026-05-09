@@ -16,6 +16,8 @@ func _init():
 
 enum Event {None, FoundFood, FoundNest}
 func step(world: World, steering: Vector2) -> Event:
+	var time = Time.get_ticks_msec()
+
 	# Move.
 	if steering == Vector2.ZERO:
 		heading = (heading + world.phero_dir(pos, goal)).normalized()
@@ -32,7 +34,7 @@ func step(world: World, steering: Vector2) -> Event:
 	elif heading.y < -THRESH: pos.y = max(pos.y - 1, 0)
 
 	# Update state.
-	var phero_stren = PHERO_MAX - 2*(Time.get_ticks_msec() - start_t)
+	var phero_stren = PHERO_MAX - 2*(time - start_t)
 	var item        = world.get_int(pos.x, pos.y, World.IntField.Item)
 	var event       = Event.None
 	
@@ -42,7 +44,7 @@ func step(world: World, steering: Vector2) -> Event:
 		goal        = World.Pheromone.Food
 		leave_trail = true
 		heading     = Vector2.ZERO
-		start_t     = Time.get_ticks_msec()
+		start_t     = time
 		phero_stren = PHERO_MAX
 	elif food_id == World.ITEM_NONE:
 		if item != World.ITEM_NONE: # Found food
@@ -52,14 +54,14 @@ func step(world: World, steering: Vector2) -> Event:
 			goal        = World.Pheromone.Home
 			leave_trail = true
 			heading     = -heading
-			start_t     = Time.get_ticks_msec()
+			start_t     = time
 			phero_stren = PHERO_MAX
 		elif goal == World.Pheromone.Food and phero_stren < PHERO_MIN: # Give up
 			goal        = World.Pheromone.Home
 			leave_trail = false
 			heading     = -heading
 
-	if steering != Vector2.ZERO: phero_stren *= 5 # Boost controlled ant.
+	#if steering != Vector2.ZERO: phero_stren *= 2.5 # Boost controlled ant.
 	# Update pheromones.
 	if leave_trail:
 		world.put_phero(pos.x, pos.y, 1 - goal, phero_stren)

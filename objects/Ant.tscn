@@ -24,6 +24,7 @@ front_leg_angle_range = Vector2(25.93, 11.495)
 middle_leg_angle_range = Vector2(17.27, 19.99)
 back_leg_angle_range = Vector2(5.97, 20.565)
 leg_stance_fraction = 0.28
+base_move_speed = 500.0
 
 [node name="Scaler" type="Node2D" parent="." unique_id=439548302]
 scale = Vector2(0.1, 0.1)
