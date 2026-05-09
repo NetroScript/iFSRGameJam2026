@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://wckarbcnw7jo" path="res://scenes/gui/MainMenu.tscn" id="1_to7s8"]
 [ext_resource type="PackedScene" uid="uid://da7q2hlv4ol03" path="res://scenes/gui/Popups/SettingsMenu.tscn" id="2_p4jr8"]
-[ext_resource type="PackedScene" uid="uid://bvow5th5sfs6k" path="res://scenes/gui/Popups/score_display.tscn" id="3_adpbt"]
 [ext_resource type="AudioStream" uid="uid://ut1b582uhv2v" path="res://assets/audio/music/Master.ogg" id="3_p4jr8"]
 [ext_resource type="AudioStream" uid="uid://jvb1dc48eu5v" path="res://assets/audio/music/04 734532__sachajulien__ants-with-contact-microphones.ogg" id="4_4ityg"]
 
@@ -59,9 +58,6 @@ script = SubResource("GDScript_4ityg")
 
 [node name="SettingsMenu" parent="CanvasLayer/Settings" unique_id=1023722682 instance=ExtResource("2_p4jr8")]
 layout_mode = 2
-
-[node name="ScoreDisplay" parent="CanvasLayer" unique_id=1210247731 instance=ExtResource("3_adpbt")]
-visible = false
 
 [node name="MusicStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2040515234]
 stream = ExtResource("3_p4jr8")

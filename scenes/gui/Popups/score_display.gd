@@ -7,6 +7,7 @@ extends Control
 @onready var score_label: Label = %ScoreLabel
 @onready var collected_label: Label = %CollectedLabel
 @onready var consumed_label: Label = %ConsumedLabel
+@onready var progress_bar: ProgressBar = %ProgressBar
 
 
 func _ready() -> void:
@@ -18,6 +19,17 @@ func _ready() -> void:
 func set_score_label_font_size(new_font_size: int) -> void:
 	new_font_size = clamp(new_font_size, 1, 100)
 	score_label.add_theme_font_size_override("font_size", new_font_size)
+
+
+func setup_progressbar(ant_hill: AntHill):
+	if not is_instance_valid(ant_hill):
+		return
+	if not is_instance_valid(progress_bar):
+		return
+	progress_bar.max_value = ant_hill.max_resources
+	progress_bar.min_value = 0.0
+	ant_hill.resource_added.connect(_on_ant_hill_resources_changed)
+	ant_hill.resource_removed.connect(_on_ant_hill_resources_changed)
 
 
 func set_calories_label_font_size(new_font_size: int) -> void:
@@ -78,3 +90,7 @@ func _format_float(value: float) -> String:
 		text = text.left(text.length() - 1)
 
 	return text
+
+
+func _on_ant_hill_resources_changed(new_resources: float):
+	progress_bar.value = new_resources

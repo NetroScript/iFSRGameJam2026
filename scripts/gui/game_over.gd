@@ -18,7 +18,6 @@ func _on_game_run_started() -> void:
 	hide()
 
 
-
 func _on_restart_button_pressed() -> void:
 	GState.paused = false
 	get_tree().reload_current_scene()

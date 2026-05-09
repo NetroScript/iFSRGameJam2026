@@ -2,6 +2,16 @@
 
 [ext_resource type="Script" uid="uid://df04nr3vijvx4" path="res://scenes/gui/Popups/score_display.gd" id="1_531ay"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_531ay"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sopkw"]
+bg_color = Color(0.34117648, 0.69803923, 0.21568628, 0.43529412)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+
 [node name="ScoreDisplay" type="Control" unique_id=1210247731]
 layout_mode = 3
 anchors_preset = 15
@@ -11,7 +21,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_531ay")
-font_size = null
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=748543199]
 layout_mode = 1
@@ -30,7 +39,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 0
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 30
 text = "Score: 0"
 
 [node name="CaloriesInfoBar" type="HBoxContainer" parent="MarginContainer" unique_id=2088048762]
@@ -42,12 +51,24 @@ theme_override_constants/separation = 50
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 30
 text = "Collected: 0 cal"
 
 [node name="ConsumedLabel" type="Label" parent="MarginContainer/CaloriesInfoBar" unique_id=972196172]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 30
 text = "Consumed: 0 cal"
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer" unique_id=714980957]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_531ay")
+theme_override_styles/fill = SubResource("StyleBoxFlat_sopkw")
+value = 85.0
+show_percentage = false

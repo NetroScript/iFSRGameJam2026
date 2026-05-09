@@ -37,7 +37,7 @@ func step(world: World, steering: Vector2) -> Event:
 	var phero_stren = PHERO_MAX - 2*(time - start_t)
 	var item        = world.get_int(pos.x, pos.y, World.IntField.Item)
 	var event       = Event.None
-	
+
 	if item == World.ITEM_NEST: # Returned to nest
 		event       = Event.FoundNest
 		food_id     = World.ITEM_NONE

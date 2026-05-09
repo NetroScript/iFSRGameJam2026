@@ -25,6 +25,7 @@ texture = ExtResource("2_p5lff")
 
 [node name="ResourceBar" type="ProgressBar" parent="." unique_id=170401777]
 unique_name_in_owner = true
+visible = false
 offset_left = -20.0
 offset_top = -8.0
 offset_right = 20.0
