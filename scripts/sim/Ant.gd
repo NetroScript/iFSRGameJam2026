@@ -44,7 +44,7 @@ func step(world: World, steering: Vector2):
 	elif food_id == World.ITEM_NONE:
 		if item != World.ITEM_NONE: # Found food
 			food_id = item
-			#world.put_food(pos.x, pos.y, World.NO_FOOD)
+			world.set_int(pos.x, pos.y, World.IntField.Item, World.ITEM_NONE)
 			goal        = World.Pheromone.Home
 			leave_trail = true
 			heading     = -heading

@@ -6,8 +6,8 @@ enum Pheromone {Home, Food}
 
 const PHERO_MAX := 30_000 # milliseconds until pheromone disappears
 
-const ITEM_NEST := UINT32_MAX - 1
-const ITEM_NONE := UINT32_MAX
+const ITEM_NEST := -2
+const ITEM_NONE := -1
 
 var time: int
 
