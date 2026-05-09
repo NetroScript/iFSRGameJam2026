@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nk270mdy3ndb"
-path="res://.godot/imported/Ant_Spritesheet.png-ea6ec306306e6b2478d01da7c290eca8.ctex"
+uid="uid://b3shu75tkiwe1"
+path="res://.godot/imported/dort-logo.png-581f18b60019abf7c6f45c9b8e282f7b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/ant/Ant_Spritesheet.png"
-dest_files=["res://.godot/imported/Ant_Spritesheet.png-ea6ec306306e6b2478d01da7c290eca8.ctex"]
+source_file="res://assets/images/dort-logo.png"
+dest_files=["res://.godot/imported/dort-logo.png-581f18b60019abf7c6f45c9b8e282f7b.ctex"]
 
 [params]
 

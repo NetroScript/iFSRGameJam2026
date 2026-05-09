@@ -74,8 +74,15 @@ var grid_data_updates_per_second := 10.0
 @export_range(1.0, 5000.0, 1.0, "suffix:px/s") var camera_pan_speed := 900.0
 @export var camera_drag_button := MOUSE_BUTTON_MIDDLE
 
+@export_group("Ant Selection")
+@export var ant_highlight: CanvasGroup
+@export var target_point_scene: PackedScene = preload("res://objects/TargetPoint.tscn")
+@export_range(1.0, 500.0, 1.0, "suffix:px") var ant_selection_radius := 120.0
+@export_range(1.0, 500.0, 1.0, "suffix:px") var target_point_toggle_radius := 120.0
+
 @onready var grid_background: Sprite2D = %GridBackground
 @onready var world_camera: Camera2D = %WorldCamera
+@onready var default_ant_parent: Node = self
 
 var world: World
 var _grid_data_image: Image
@@ -87,9 +94,14 @@ var _grid_data_timestamp_ms := 0.0
 var _should_restore_grid_data_texture_after_save := false
 var _camera_dragging := false
 var _camera_drag_last_position := Vector2.ZERO
+var _selected_ants: Array[Ant] = []
+var _ant_original_parents: Dictionary[int, Node] = {}
+var _target_point: Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	if ant_highlight == null and has_node("%AntHighlight"):
+		ant_highlight = %AntHighlight
 	_recreate_world()
 	_setup_world_camera()
 	Gamestate.start_run()
@@ -149,6 +161,12 @@ func _handle_camera_mouse_button(event: InputEventMouseButton) -> void:
 	if event.button_index == camera_drag_button:
 		_camera_dragging = event.pressed
 		_camera_drag_last_position = event.position
+		get_viewport().set_input_as_handled()
+	elif event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		_select_ants_at(get_global_mouse_position())
+		get_viewport().set_input_as_handled()
+	elif event.pressed and event.button_index == MOUSE_BUTTON_RIGHT:
+		_toggle_selected_ants_target(get_global_mouse_position())
 		get_viewport().set_input_as_handled()
 	elif event.pressed and event.button_index == MOUSE_BUTTON_WHEEL_UP:
 		_zoom_camera(1.0 + camera_zoom_step)
@@ -228,6 +246,126 @@ func _min_camera_zoom_value() -> float:
 
 func _max_camera_zoom_value() -> float:
 	return maxf(min_camera_zoom, max_camera_zoom)
+
+
+func _select_ants_at(world_position: Vector2) -> void:
+	var ants := _get_ants_in_radius(world_position, ant_selection_radius)
+	_set_selected_ants(ants)
+
+
+func _set_selected_ants(ants: Array[Ant]) -> void:
+	for ant in _selected_ants:
+		if not is_instance_valid(ant):
+			continue
+		if not ants.has(ant):
+			_deselect_ant(ant)
+
+	for ant in ants:
+		if not is_instance_valid(ant):
+			continue
+		if not _selected_ants.has(ant):
+			_select_ant(ant)
+
+	_selected_ants = ants
+
+	if _selected_ants.is_empty():
+		_clear_target_point()
+
+
+func _select_ant(ant: Ant) -> void:
+	if ant_highlight == null:
+		return
+
+	var parent := ant.get_parent()
+	if parent != ant_highlight:
+		_ant_original_parents[ant.get_instance_id()] = parent
+		_reparent_node2d_preserve_global_transform(ant, ant_highlight)
+
+	ant.selected_for_player_control = true
+	if _target_point != null:
+		ant.set_player_target(_target_point.global_position)
+
+
+func _deselect_ant(ant: Ant) -> void:
+	ant.clear_player_target()
+	ant.selected_for_player_control = false
+
+	var original_parent := _ant_original_parents.get(ant.get_instance_id(), default_ant_parent) as Node
+	if original_parent != null and is_instance_valid(original_parent) and ant.get_parent() != original_parent:
+		_reparent_node2d_preserve_global_transform(ant, original_parent)
+
+	_ant_original_parents.erase(ant.get_instance_id())
+
+
+func _toggle_selected_ants_target(world_position: Vector2) -> void:
+	if _selected_ants.is_empty():
+		return
+
+	if _target_point != null and is_instance_valid(_target_point):
+		if _target_point.global_position.distance_to(world_position) <= target_point_toggle_radius:
+			_clear_target_point()
+			return
+
+	_clear_target_point()
+	_target_point = _create_target_point(world_position)
+	for ant in _selected_ants:
+		if is_instance_valid(ant):
+			ant.set_player_target(world_position)
+
+
+func _create_target_point(world_position: Vector2) -> Node2D:
+	var target: Node2D
+	if target_point_scene != null:
+		target = target_point_scene.instantiate() as Node2D
+
+	if target == null:
+		target = Node2D.new()
+		target.name = "TargetPoint"
+
+	add_child(target)
+	target.global_position = world_position
+	return target
+
+
+func _clear_target_point() -> void:
+	for ant in _selected_ants:
+		if is_instance_valid(ant):
+			ant.clear_player_target()
+
+	if _target_point != null and is_instance_valid(_target_point):
+		_target_point.queue_free()
+	_target_point = null
+
+
+func _get_ants_in_radius(world_position: Vector2, radius: float) -> Array[Ant]:
+	var ants: Array[Ant] = []
+	var radius_squared := radius * radius
+	for ant in _get_all_ants():
+		if ant.global_position.distance_squared_to(world_position) <= radius_squared:
+			ants.append(ant)
+
+	return ants
+
+
+func _get_all_ants() -> Array[Ant]:
+	var ants: Array[Ant] = []
+	_collect_ants(self, ants)
+	return ants
+
+
+func _collect_ants(node: Node, ants: Array[Ant]) -> void:
+	if node is Ant:
+		ants.append(node as Ant)
+
+	for child in node.get_children():
+		_collect_ants(child, ants)
+
+
+func _reparent_node2d_preserve_global_transform(node: Node2D, new_parent: Node) -> void:
+	var previous_global_transform := node.global_transform
+	node.get_parent().remove_child(node)
+	new_parent.add_child(node)
+	node.global_transform = previous_global_transform
 
 func _draw() -> void:
 	var world_rect := _world_rect()
