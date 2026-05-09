@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://wckarbcnw7jo"]
 
+[ext_resource type="Texture2D" uid="uid://cdcijs0se17h1" path="res://assets/images/mouse.svg" id="1_n3jsm"]
+
 [sub_resource type="Theme" id="Theme_jes8i"]
 default_font_size = 30
 
@@ -91,3 +93,35 @@ mouse_default_cursor_shape = 2
 text = "Exit"
 flat = true
 script = SubResource("GDScript_jes8i")
+
+[node name="Controls" type="Control" parent="MarginContainer/CenterContainer" unique_id=168251530]
+layout_mode = 2
+
+[node name="MouseImage" type="Sprite2D" parent="MarginContainer/CenterContainer/Controls" unique_id=769267125]
+position = Vector2(356, 32)
+scale = Vector2(0.51578945, 0.51578945)
+texture = ExtResource("1_n3jsm")
+
+[node name="Lmb" type="Label" parent="MarginContainer/CenterContainer/Controls" unique_id=2063600416]
+layout_mode = 0
+offset_left = 273.0
+offset_top = -56.0
+offset_right = 323.0
+offset_bottom = -30.0
+text = "Select"
+
+[node name="Wheel" type="Label" parent="MarginContainer/CenterContainer/Controls" unique_id=1932523634]
+layout_mode = 0
+offset_left = 336.0
+offset_top = -81.0
+offset_right = 379.0
+offset_bottom = -55.0
+text = "Zoom"
+
+[node name="Rmb" type="Label" parent="MarginContainer/CenterContainer/Controls" unique_id=2073897440]
+layout_mode = 0
+offset_left = 397.0
+offset_top = -57.0
+offset_right = 447.0
+offset_bottom = -31.0
+text = "Focus"
