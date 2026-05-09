@@ -64,7 +64,6 @@ func remove_resource(amount: int) -> Food:
 		_clear_food_from_world_grid()
 		depleted.emit()
 		queue_free()
-		push_warning("Removing food resource")
 	return food
 
 
