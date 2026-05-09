@@ -14,7 +14,8 @@ const PHERO_MIN := PHERO_MAX / 2
 func _init():
 	start_t = Time.get_ticks_msec()
 
-func step(world: World, steering: Vector2):
+enum Event {None, FoundFood, FoundNest}
+func step(world: World, steering: Vector2) -> Event:
 	# Move.
 	if steering == Vector2.ZERO:
 		heading = (heading + world.phero_dir(pos, goal)).normalized()
@@ -33,8 +34,10 @@ func step(world: World, steering: Vector2):
 	# Update state.
 	var phero_stren = PHERO_MAX - 2*(Time.get_ticks_msec() - start_t)
 	var item        = world.get_int(pos.x, pos.y, World.IntField.Item)
+	var event       = Event.None
 	
 	if item == World.ITEM_NEST: # Returned to nest
+		event       = Event.FoundNest
 		food_id     = World.ITEM_NONE
 		goal        = World.Pheromone.Food
 		leave_trail = true
@@ -43,6 +46,7 @@ func step(world: World, steering: Vector2):
 		phero_stren = PHERO_MAX
 	elif food_id == World.ITEM_NONE:
 		if item != World.ITEM_NONE: # Found food
+			event = Event.FoundFood
 			food_id = item
 			world.set_int(pos.x, pos.y, World.IntField.Item, World.ITEM_NONE)
 			goal        = World.Pheromone.Home
@@ -59,6 +63,8 @@ func step(world: World, steering: Vector2):
 	# Update pheromones.
 	if leave_trail:
 		world.put_phero(pos.x, pos.y, 1 - goal, phero_stren)
+
+	return event
 
 func carried_food_res(world: World) -> FoodResource:
 	if food_id == World.ITEM_NONE: return null
