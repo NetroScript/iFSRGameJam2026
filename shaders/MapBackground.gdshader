@@ -22,7 +22,8 @@ uniform vec2 grid_cell_size = vec2(1.0, 1.0);
 uniform int grid_field_count = 2;
 uniform float grid_timestamp_ms = 0.0;
 uniform float grid_phero_max = 30000.0;
-uniform float grid_data_strength : hint_range(0.0, 1.0) = 0.45;
+uniform float grid_data_strength : hint_range(0.0, 1.0) = 0.70;
+uniform bool grid_data_color_full_cells = false;
 
 varying vec2 world_pos;
 
@@ -142,20 +143,56 @@ float read_grid_field(ivec2 cell, int field) {
 	return texture(grid_data_texture, vec2(texel_x, texel_y)).r;
 }
 
-vec3 grid_data_color(vec2 p) {
+vec3 grid_data_cell_color(ivec2 cell) {
+	ivec2 clamped_cell = clamp(cell, ivec2(0), grid_resolution - ivec2(1));
+	float home_phero_stamp = read_grid_field(clamped_cell, 0);
+	float food_phero_stamp = read_grid_field(clamped_cell, 1);
+
+	float home_phero = clamp((grid_phero_max - (grid_timestamp_ms - home_phero_stamp)) / grid_phero_max, 0.0, 1.0);
+	float food_phero = clamp((grid_phero_max - (grid_timestamp_ms - food_phero_stamp)) / grid_phero_max, 0.0, 1.0);
+
+	return vec3(food_phero, 0.0, home_phero);
+}
+
+vec3 grid_data_color(vec2 p, bool smooth_cells) {
 	vec2 grid_uv = (p - grid_world_rect.xy) / max(grid_world_rect.zw, vec2(0.0001));
 	if (grid_uv.x < 0.0 || grid_uv.y < 0.0 || grid_uv.x >= 1.0 || grid_uv.y >= 1.0) {
 		return vec3(0.0);
 	}
 
-	ivec2 cell = ivec2(clamp(floor(grid_uv * vec2(grid_resolution)), vec2(0.0), vec2(grid_resolution - ivec2(1))));
-	float home_phero_stamp = read_grid_field(cell, 0);
-	float food_phero_stamp = read_grid_field(cell, 1);
+	vec2 grid_pos = grid_uv * vec2(grid_resolution);
+	if (!smooth_cells) {
+		return grid_data_cell_color(ivec2(floor(grid_pos)));
+	}
 
-	float home_phero = clamp((grid_phero_max - (grid_timestamp_ms - home_phero_stamp)) / grid_phero_max, 0.0, 1.0);
-	float food_phero = clamp((grid_phero_max - (grid_timestamp_ms - food_phero_stamp)) / grid_phero_max, 0.0, 1.0);
+	vec2 centered_grid_pos = grid_pos - vec2(0.5);
+	ivec2 cell_min = ivec2(floor(centered_grid_pos));
+	vec2 blend = smoothstep(vec2(0.0), vec2(1.0), fract(centered_grid_pos));
 
-	return vec3(food_phero, max(home_phero, food_phero) * 0.28, home_phero);
+	vec3 top = mix(
+		grid_data_cell_color(cell_min),
+		grid_data_cell_color(cell_min + ivec2(1, 0)),
+		blend.x
+	);
+	vec3 bottom = mix(
+		grid_data_cell_color(cell_min + ivec2(0, 1)),
+		grid_data_cell_color(cell_min + ivec2(1, 1)),
+		blend.x
+	);
+	return mix(top, bottom, blend.y);
+}
+
+float grid_data_realistic_alpha(vec2 p, vec3 grid_color) {
+	float strength = max(grid_color.r, grid_color.b);
+	float large_variation = fbm(p * 0.012);
+	float medium_variation = value_noise(p * 0.045);
+	float fine_variation = hash21(floor(p * 0.18));
+	float deposit_mask = smoothstep(
+		0.16,
+		0.84,
+		large_variation * 0.55 + medium_variation * 0.35 + fine_variation * 0.10
+	);
+	return clamp(strength * grid_data_strength * mix(0.35, 1.35, deposit_mask), 0.0, 1.0);
 }
 
 void fragment() {
@@ -186,8 +223,13 @@ void fragment() {
 
 	vec3 color = base_color.rgb * tint + combined;
 	if (show_grid_data) {
-		vec3 grid_color = grid_data_color(p);
-		float grid_alpha = clamp(max(max(grid_color.r, grid_color.g), grid_color.b) * grid_data_strength, 0.0, 1.0);
+		vec3 grid_color = grid_data_color(p, !grid_data_color_full_cells);
+		float grid_alpha;
+		if (grid_data_color_full_cells) {
+			grid_alpha = clamp(max(max(grid_color.r, grid_color.g), grid_color.b) * grid_data_strength, 0.0, 1.0);
+		} else {
+			grid_alpha = grid_data_realistic_alpha(p, grid_color);
+		}
 		color = mix(color, grid_color, grid_alpha);
 	}
 

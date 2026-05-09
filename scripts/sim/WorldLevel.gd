@@ -59,6 +59,11 @@ var send_grid_data_to_background_shader := true:
 		_update_background_shader(true)
 @export_range(0.0, 60.0, 0.1, "suffix:Hz")
 var grid_data_updates_per_second := 10.0
+@export
+var color_full_grid_cells_with_pheromones := true:
+	set(value):
+		color_full_grid_cells_with_pheromones = value
+		_update_background_shader()
 
 @export_group("World Camera")
 @export var camera_controls_enabled := true
@@ -415,6 +420,7 @@ func _update_background_shader(update_grid_texture := false) -> void:
 	material.set_shader_parameter("grid_phero_max", float(World.PHERO_MAX))
 	material.set_shader_parameter("grid_field_count", _GRID_DATA_PHEROMONE_FIELD_COUNT)
 	material.set_shader_parameter("show_grid_data", send_grid_data_to_background_shader)
+	material.set_shader_parameter("grid_data_color_full_cells", color_full_grid_cells_with_pheromones)
 
 	if send_grid_data_to_background_shader and world != null:
 		if update_grid_texture:
