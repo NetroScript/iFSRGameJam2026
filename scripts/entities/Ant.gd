@@ -428,12 +428,12 @@ func _on_target_reached() -> void:
 		if currently_carried_food != null and _carried_food == null:
 			_collect_resource(currently_carried_food)
 			if _carried_food != null:
-				print("Ant %s collected food resource %s" % [self.get_instance_id(), _carried_food.name])
+				print_verbose("Ant %s collected food resource %s" % [self.get_instance_id(), _carried_food.name])
 		else:
-			print("Ant %s found food but failed to collect it" % self.get_instance_id())
+			print_verbose("Ant %s found food but failed to collect it" % self.get_instance_id())
 	
 	elif event == SimAnt.Event.FoundNest and _carried_food != null:
-		print("Ant %s deposited food resource %s at nest" % [self.get_instance_id(), _carried_food.name])
+		print_verbose("Ant %s deposited food resource %s at nest" % [self.get_instance_id(), _carried_food.name])
 		_deposit_food()
 	
 	_choose_next_target()

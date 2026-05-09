@@ -80,7 +80,7 @@ func put_world_item(aabb: Rect2, level: WorldLevel, item: int):
 		item,
 	)
 func put_item(aabb: Rect2i, id: int):
-	print("Add item %s at %s}" % [id, aabb])
+	print_verbose("Add item %s at %s}" % [id, aabb])
 	for y in range(aabb.position.y, aabb.end.y):
 		for x in range(aabb.position.x, aabb.end.x):
 			set_int(x, y, IntField.Item, id)

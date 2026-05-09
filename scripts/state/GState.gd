@@ -526,7 +526,7 @@ func _apply_paused(value: bool) -> void:
 # -------------------------------------------------------------------
 # Events
 # -------------------------------------------------------------------
-func _input(_event: InputEvent):
+func _unhandled_input(_event: InputEvent):
 	if Engine.is_editor_hint():
 		return
 	if Input.is_action_just_pressed("toggle_fullscreen"):

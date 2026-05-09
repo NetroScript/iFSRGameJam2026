@@ -94,10 +94,10 @@ func _reinit():
 		_set_displayed_value(GState.get(selected_gstate_property) as float)
 
 		if not _gstate_signal_binding.reconnect_property_changed(selected_gstate_property, _on_gstate_changed):
-			print("GUI Failed to connect to signal of GState ... does %s exist?" % (selected_gstate_property + "_changed"))
+			print_verbose("GUI Failed to connect to signal of GState ... does %s exist?" % (selected_gstate_property + "_changed"))
 	else:
 		_gstate_signal_binding.clear_binding(_on_gstate_changed)
-		print("Settings Slider %s incorrectly configured" % name)
+		print_verbose("Settings Slider %s incorrectly configured" % name)
 
 func _on_gstate_changed(val: float):
 	_set_displayed_value(val)

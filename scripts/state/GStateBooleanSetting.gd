@@ -29,14 +29,14 @@ func _reinit():
 	# Change the value of this button to represent the current GState
 	if selected_gstate_property != "":
 		if typeof(GState.get(selected_gstate_property)) != TYPE_BOOL:
-			print("GState Value " + str(selected_gstate_property) + " is not a bool.")
+			print_verbose("GState Value " + str(selected_gstate_property) + " is not a bool.")
 		button_pressed = GState.get(selected_gstate_property) as bool
 		
 		if not _gstate_signal_binding.reconnect_property_changed(selected_gstate_property, _on_gstate_changed):
-			print("GUI Failed to connect to signal of GState ... does %s exist?" % (selected_gstate_property + "_changed"))
+			print_verbose("GUI Failed to connect to signal of GState ... does %s exist?" % (selected_gstate_property + "_changed"))
 	else:
 		_gstate_signal_binding.clear_binding(_on_gstate_changed)
-		print("Settings Button %s incorrectly configured" % name)
+		print_verbose("Settings Button %s incorrectly configured" % name)
 
 func _on_gstate_changed(state: bool):
 	set_pressed_no_signal(state) 
