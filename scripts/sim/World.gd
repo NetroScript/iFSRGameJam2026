@@ -65,21 +65,24 @@ func put_phero(x: int, y: int, phero: Pheromone, strength: int):
 func add_food(food: FoodResource, level: WorldLevel):
 	food_items.push_back(food)
 	var aabb := food.sprite_2d.get_rect()
-	put_item(
-		Rect2i(
-			level.world_position_to_cell(food.sprite_2d.to_global(aabb.position)),
+	add_world_item(
+		Rect2(
+			food.sprite_2d.to_global(aabb.position),
 			aabb.size * food.sprite_2d.scale / Vector2(level.cell_size)
 		),
+		level,
 		food_items.size() - 1,
 	)
-func place_nest(area: Rect2, level: WorldLevel):
-	put_item(
-		Rect2i(area.position / Vector2(level.cell_size), area.size / Vector2(level.cell_size)),
-		ITEM_NEST,
+func add_world_item(aabb: Rect2, level: WorldLevel, item: int):
+	var size = aabb.size / Vector2(level.cell_size)
+	add_item(
+		Rect2i(level.world_position_to_cell(aabb.position) - Vector2i(size/2), size),
+		item,
 	)
-func put_item(area: Rect2i, id: int):
-	for y in range(area.position.y, area.end.y):
-		for x in range(area.position.x, area.end.x):
+func add_item(aabb: Rect2i, id: int):
+	print("Add item %s at %s}" % [id, aabb])
+	for y in range(aabb.position.y, aabb.end.y):
+		for x in range(aabb.position.x, aabb.end.x):
 			set_int(x, y, IntField.Item, id)
 
 func get_int(x: int, y: int, field: IntField) -> int:

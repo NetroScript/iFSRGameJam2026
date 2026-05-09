@@ -20,7 +20,8 @@ script = ExtResource("1_l2c41")
 unique_name_in_owner = true
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=454199519]
-scale = Vector2(0.02, 0.02)
+unique_name_in_owner = true
+scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_p5lff")
 
 [node name="ResourceBar" type="ProgressBar" parent="." unique_id=170401777]
