@@ -4,7 +4,7 @@ enum Pheromone {Home, Food}
 
 @export var size: Vector2i
 
-const PHERO_MAX := 30_000 # milliseconds until pheromone disappears
+const PHERO_MAX := 180_000 # milliseconds until pheromone disappears
 
 const ITEM_NEST := -2
 const ITEM_NONE := -1
