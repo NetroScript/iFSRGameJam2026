@@ -2,7 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://wckarbcnw7jo" path="res://scenes/gui/MainMenu.tscn" id="1_to7s8"]
 [ext_resource type="PackedScene" uid="uid://da7q2hlv4ol03" path="res://scenes/gui/Popups/SettingsMenu.tscn" id="2_p4jr8"]
-[ext_resource type="AudioStream" uid="uid://cmo22fh0fb25o" path="res://assets/audio/music/Master_with_antNoise.ogg" id="3_p4jr8"]
+[ext_resource type="AudioStream" uid="uid://ut1b582uhv2v" path="res://assets/audio/music/Master.ogg" id="3_p4jr8"]
+[ext_resource type="AudioStream" uid="uid://jvb1dc48eu5v" path="res://assets/audio/music/04 734532__sachajulien__ants-with-contact-microphones.ogg" id="4_4ityg"]
 
 [sub_resource type="GDScript" id="GDScript_4ityg"]
 script/source = "extends MarginContainer
@@ -58,8 +59,14 @@ script = SubResource("GDScript_4ityg")
 [node name="SettingsMenu" parent="CanvasLayer/Settings" unique_id=1023722682 instance=ExtResource("2_p4jr8")]
 layout_mode = 2
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2040515234]
+[node name="MusicStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=2040515234]
 stream = ExtResource("3_p4jr8")
 autoplay = true
 bus = &"Music"
+parameters/looping = true
+
+[node name="AntNoiseStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=587753241]
+stream = ExtResource("4_4ityg")
+autoplay = true
+bus = &"SFX"
 parameters/looping = true
