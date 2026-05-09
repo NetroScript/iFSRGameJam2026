@@ -505,3 +505,11 @@ func _apply_paused(value: bool) -> void:
 		return
 
 	get_tree().paused = value
+
+
+# -------------------------------------------------------------------
+# Events
+# -------------------------------------------------------------------
+func _input(_event: InputEvent):
+	if Input.is_action_just_pressed("toggle_fullscreen"):
+		fullscreen = not fullscreen
