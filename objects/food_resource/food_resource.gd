@@ -33,7 +33,9 @@ func remove_resource(amount: int) -> Food:
 	if available_chunks == 0:
 		queue_free()
 		return null
-	available_chunks -= amount
+	var chunks_taken = min(available_chunks, amount)
+	available_chunks -= chunks_taken
+	Gamestate.resources_collected(floori(food.calories * chunks_taken))
 	available_chunks = clamp(available_chunks, 0, max_chunks)
 	resource_removed.emit(available_chunks)
 	_adapt_sprite_scale()

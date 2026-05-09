@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://bvow5th5sfs6k"]
+
+[ext_resource type="Script" uid="uid://df04nr3vijvx4" path="res://scenes/gui/Popups/score_display.gd" id="1_531ay"]
+
+[node name="ScoreDisplay" type="Control" unique_id=1210247731]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_531ay")
+font_size = null
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=748543199]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="ScoreLabel" type="Label" parent="MarginContainer" unique_id=1180490841]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "Score: 0"
+
+[node name="CaloriesInfoBar" type="HBoxContainer" parent="MarginContainer" unique_id=2088048762]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/separation = 50
+
+[node name="CollectedLabel" type="Label" parent="MarginContainer/CaloriesInfoBar" unique_id=1664218787]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 40
+text = "Collected: 0 cal"
+
+[node name="ConsumedLabel" type="Label" parent="MarginContainer/CaloriesInfoBar" unique_id=972196172]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_font_sizes/font_size = 40
+text = "Consumed: 0 cal"

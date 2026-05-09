@@ -22,6 +22,7 @@ buses/default_bus_layout="uid://stgik2js1smt"
 [autoload]
 
 GState="*uid://c161ugd4py04l"
+Gamestate="*uid://jljonhqbk41q"
 
 [display]
 

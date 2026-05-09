@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cvor5dmn2lje5" path="res://objects/food_resource/food_resource.tscn" id="1_dihx3"]
 [ext_resource type="PackedScene" uid="uid://b3fgi2u127m3m" path="res://objects/ant_hill/ant_hill.tscn" id="2_nfwpx"]
 [ext_resource type="Resource" uid="uid://cfi8cmlcclgej" path="res://objects/food/ice_cream.tres" id="4_4qunm"]
+[ext_resource type="PackedScene" uid="uid://bvow5th5sfs6k" path="res://scenes/gui/Popups/score_display.tscn" id="5_4qunm"]
 
 [node name="TmpScene" type="Node2D" unique_id=369819177]
 script = ExtResource("1_22jtm")
@@ -12,8 +13,8 @@ script = ExtResource("1_22jtm")
 unique_name_in_owner = true
 position = Vector2(-328.99997, -116.99999)
 scale = Vector2(10, 10)
-start_resources = 300.0
-max_resources = 300.0
+start_resources = 400.0
+max_resources = 400.0
 drain_rate = 30.0
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=493425930]
@@ -26,5 +27,9 @@ max_chunks = 20
 
 [node name="Timer" type="Timer" parent="." unique_id=2049690761]
 unique_name_in_owner = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=182577136]
+
+[node name="ScoreDisplay" parent="CanvasLayer" unique_id=1210247731 instance=ExtResource("5_4qunm")]
 
 [editable path="FoodResource"]

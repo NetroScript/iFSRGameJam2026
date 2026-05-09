@@ -75,12 +75,14 @@ func remove_resource(amount: float) -> void:
 	if resources <= 0.0:
 		return
 	resources -= amount
+	Gamestate.resources_consumed(floori(amount))
 	resources = clamp(resources, 0.0, max_resources)
 	resource_removed.emit(resources)
 	_update_resource_bar()
 
 	if resources == 0.0:
 		depleted.emit()
+		Gamestate.end_run()
 		push_warning("Resources depleted")
 
 
