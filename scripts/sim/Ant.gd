@@ -15,11 +15,11 @@ func _init():
 
 func step(world: World, steering: Vector2):
 	# Move.
-	if steering == Vector2.ZERO:
+	if steering.is_equal_approx(Vector2.ZERO):
 		heading = (heading + world.phero_dir(pos, goal)).normalized()
 	else: heading = steering
 
-	if heading == Vector2(0, 0): heading = Vector2.from_angle(randf_range(0, TAU))
+	if heading.is_equal_approx(Vector2(0, 0)): heading = Vector2.from_angle(randf_range(0, TAU))
 	else: heading = heading.rotated(randfn(0, PI/32))
 
 	const THRESH = sin(TAU/16)
@@ -54,5 +54,5 @@ func step(world: World, steering: Vector2):
 
 	if steering != Vector2.ZERO: phero_stren *= 5 # Boost controlled ant.
 	# Update pheromones.
-	if phero_stren > PHERO_MIN:
-		world.put_phero(pos.x, pos.y, 1 - goal, phero_stren)
+	#if phero_stren > PHERO_MIN:
+	world.put_phero(pos.x, pos.y, 1 - goal, phero_stren)

@@ -14,7 +14,7 @@ func _ready():
 
 	ants.resize(20)
 	for i in range(ants.size()):
-		var ant = Ant.new()
+		var ant := SimAnt.new()
 		ant.pos = world.nest
 		ant.heading = Vector2.ZERO
 		ant.goal = World.Pheromone.Food

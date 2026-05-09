@@ -64,6 +64,19 @@ extends Node2D
 @export var back_leg_angle_range := Vector2(18.0, 22.0)
 @export_range(0.1, 0.9, 0.01) var leg_stance_fraction := 0.62
 
+@export_category("Grid Behavior")
+@export var grid_behavior_enabled := true
+@export_range(1.0, 2000.0, 1.0, "suffix:px/s") var base_move_speed := 140.0
+@export_range(0.0, 1.0, 0.01) var move_speed_jitter := 0.12
+@export_range(0.0, 1.0, 0.01) var heading_randomness := 0.28
+@export_range(0.1, 64.0, 0.1, "suffix:px") var arrive_distance := 6.0
+@export var selected_for_player_control := false:
+	set(value):
+		selected_for_player_control = value
+		if not selected_for_player_control:
+			player_target_active = false
+@export var player_target_active := false
+@export var player_target_position := Vector2.ZERO
 
 var _rng := RandomNumberGenerator.new()
 var rendered_components: Array[Polygon2D]
@@ -83,6 +96,15 @@ var _mandible_current_degrees := 0.0
 var _mandible_clicks_remaining := 0
 var _leg_phase := 0.0
 var _legs_data: Array[Dictionary] = []
+var _world_level: WorldLevel
+var _world: World
+var _home_hill: AntHill
+var _grid_cell := Vector2i.ZERO
+var _target_grid_cell := Vector2i.ZERO
+var _target_position := Vector2.ZERO
+var _move_speed := 0.0
+var _sim_ant: SimAnt
+var _behavior_ready := false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -98,6 +120,10 @@ func _ready() -> void:
 	
 	if animate_on_ready and (not Engine.is_editor_hint() or animate_in_editor):
 		start_animations()
+	
+	_move_speed = base_move_speed * _random_factor(move_speed_jitter)
+	if _world_level != null:
+		_start_grid_behavior()
 
 
 func _notification(what: int) -> void:
@@ -140,7 +166,7 @@ func start_animations() -> void:
 	_setup_antenna_animation_state()
 	_setup_mandible_animation_state()
 	_setup_leg_animation_state()
-	set_process(true)
+	_refresh_process_enabled()
 
 
 func stop_animations() -> void:
@@ -148,8 +174,50 @@ func stop_animations() -> void:
 	_animation_generation += 1
 	_antenna_states.clear()
 	_legs_data.clear()
-	set_process(false)
+	_refresh_process_enabled()
 	_reset_component_rotations()
+
+
+func setup_grid_behavior(world_level: WorldLevel, home_hill: AntHill) -> void:
+	_world_level = world_level
+	_home_hill = home_hill
+	if _is_ready:
+		_start_grid_behavior()
+
+
+func set_player_target(target_position: Vector2) -> void:
+	selected_for_player_control = true
+	player_target_active = true
+	player_target_position = target_position
+
+
+func clear_player_target() -> void:
+	player_target_active = false
+
+
+func _start_grid_behavior() -> void:
+	if Engine.is_editor_hint() or not grid_behavior_enabled or _world_level == null:
+		return
+
+	_world = _world_level.get("world") as World
+	if _world == null:
+		return
+
+	if _move_speed <= 0.0:
+		_move_speed = base_move_speed * _random_factor(move_speed_jitter)
+
+	_grid_cell = _world_level.world_position_to_cell(global_position)
+	_sim_ant = SimAnt.new()
+	_sim_ant.pos = _grid_cell
+	_sim_ant.heading = Vector2.from_angle(_rng.randf_range(0.0, TAU))
+	_behavior_ready = true
+	walking = true
+	_choose_next_target()
+	_refresh_process_enabled()
+
+
+func _refresh_process_enabled() -> void:
+	set_process(_animation_running or _behavior_ready)
 
 
 func _reset_component_rotations() -> void:
@@ -285,7 +353,7 @@ func _set_mandible_rotation(degrees: float) -> void:
 
 
 func _setup_leg_animation_state() -> void:
-	_leg_phase = 0.0
+	_leg_phase = _rng.randf()
 	# Tripod gait: group A (phase 0.0) and group B (phase 0.5) alternate.
 	# direction: -1.0 for left-side legs, +1.0 for right-side legs.
 	_legs_data = [
@@ -327,8 +395,74 @@ func _update_leg_animations(delta: float) -> void:
 		leg.rotation = _base_rotations[leg.get_instance_id()] + offset
 
 
+func _update_grid_behavior(delta: float) -> void:
+	if not _behavior_ready or _world == null or _world_level == null:
+		return
+
+	var to_target := _target_position - global_position
+	if to_target.length() <= arrive_distance:
+		global_position = _target_position
+		_on_target_reached()
+		return
+
+	var direction := to_target.normalized()
+	global_position += direction * _move_speed * delta
+	rotation = direction.angle() + PI * 0.5
+
+
+func _on_target_reached() -> void:
+	if _sim_ant == null:
+		return
+
+	_sim_ant.pos = _world_level.world_position_to_cell(global_position)
+	var carried_food_id := _sim_ant.food_id
+	_sim_ant.step(_world, _get_player_control_direction())
+	_grid_cell = _sim_ant.pos
+
+	if carried_food_id != World.NO_FOOD and _sim_ant.food_id == World.NO_FOOD:
+		_deposit_food(carried_food_id)
+	
+	_choose_next_target()
+
+
+func _choose_next_target() -> void:
+	_target_grid_cell = _choose_next_grid_cell()
+	_target_position = _world_level.random_point_in_cell(_target_grid_cell)
+
+
+func _choose_next_grid_cell() -> Vector2i:
+	if _world == null or _sim_ant == null:
+		return _grid_cell
+
+	return _world_level.clamp_cell(_sim_ant.pos)
+
+
+func _get_player_control_direction() -> Vector2:
+	if not selected_for_player_control or not player_target_active:
+		return Vector2.ZERO
+
+	var direction := player_target_position - global_position
+	if direction.length_squared() <= arrive_distance * arrive_distance:
+		return Vector2.ZERO
+
+	return direction.normalized()
+
+
+func _deposit_food(food_id: int) -> void:
+	if _home_hill == null or _world == null:
+		return
+
+	if food_id < 0 or food_id >= _world.food_instances.size():
+		return
+
+	_home_hill.add_resource(_world.food_instances[food_id])
+
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if _behavior_ready:
+		_update_grid_behavior(delta)
+	
 	if not _animation_running:
 		return
 	

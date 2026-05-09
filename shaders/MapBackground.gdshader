@@ -14,6 +14,16 @@ uniform float large_scale = 0.004;
 uniform vec3 shadow_tint : source_color = vec3(0.85, 0.90, 1.0);
 uniform vec3 highlight_tint : source_color = vec3(1.08, 1.04, 0.96);
 
+uniform bool show_grid_data = false;
+uniform sampler2D grid_data_texture : filter_nearest, repeat_disable;
+uniform vec4 grid_world_rect = vec4(0.0, 0.0, 1.0, 1.0);
+uniform ivec2 grid_resolution = ivec2(1, 1);
+uniform vec2 grid_cell_size = vec2(1.0, 1.0);
+uniform int grid_field_count = 2;
+uniform float grid_timestamp_ms = 0.0;
+uniform float grid_phero_max = 30000.0;
+uniform float grid_data_strength : hint_range(0.0, 1.0) = 0.45;
+
 varying vec2 world_pos;
 
 void vertex() {
@@ -125,6 +135,29 @@ float fbm(vec2 p) {
 	return total;
 }
 
+float read_grid_field(ivec2 cell, int field) {
+	ivec2 texture_size = textureSize(grid_data_texture, 0);
+	float texel_x = (float(cell.x) + 0.5) / float(texture_size.x);
+	float texel_y = (float(cell.y * grid_field_count + field) + 0.5) / float(texture_size.y);
+	return texture(grid_data_texture, vec2(texel_x, texel_y)).r;
+}
+
+vec3 grid_data_color(vec2 p) {
+	vec2 grid_uv = (p - grid_world_rect.xy) / max(grid_world_rect.zw, vec2(0.0001));
+	if (grid_uv.x < 0.0 || grid_uv.y < 0.0 || grid_uv.x >= 1.0 || grid_uv.y >= 1.0) {
+		return vec3(0.0);
+	}
+
+	ivec2 cell = ivec2(clamp(floor(grid_uv * vec2(grid_resolution)), vec2(0.0), vec2(grid_resolution - ivec2(1))));
+	float home_phero_stamp = read_grid_field(cell, 0);
+	float food_phero_stamp = read_grid_field(cell, 1);
+
+	float home_phero = clamp((grid_phero_max - (grid_timestamp_ms - home_phero_stamp)) / grid_phero_max, 0.0, 1.0);
+	float food_phero = clamp((grid_phero_max - (grid_timestamp_ms - food_phero_stamp)) / grid_phero_max, 0.0, 1.0);
+
+	return vec3(food_phero, max(home_phero, food_phero) * 0.28, home_phero);
+}
+
 void fragment() {
 	vec2 p = world_pos;
 
@@ -152,6 +185,11 @@ void fragment() {
 	vec3 tint = mix(shadow_tint, highlight_tint, smoothstep(-0.15, 0.15, combined));
 
 	vec3 color = base_color.rgb * tint + combined;
+	if (show_grid_data) {
+		vec3 grid_color = grid_data_color(p);
+		float grid_alpha = clamp(max(max(grid_color.r, grid_color.g), grid_color.b) * grid_data_strength, 0.0, 1.0);
+		color = mix(color, grid_color, grid_alpha);
+	}
 
 	COLOR = vec4(clamp(color, 0.0, 1.0), base_color.a);
 }
