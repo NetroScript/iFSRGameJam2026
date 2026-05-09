@@ -2,9 +2,16 @@
 
 [ext_resource type="Script" uid="uid://cl20uks44po5m" path="res://objects/food_resource/food_resource.gd" id="1_ruv7f"]
 [ext_resource type="Texture2D" uid="uid://d1rg2q3ckwker" path="res://tmp/ice_cream_ants_own.png" id="2_ifk8v"]
+[ext_resource type="Script" uid="uid://b6ui0t4vvd65o" path="res://scripts/food.gd" id="2_jhi0n"]
+
+[sub_resource type="Resource" id="Resource_oqoql"]
+script = ExtResource("2_jhi0n")
+metadata/_custom_type_script = "uid://b6ui0t4vvd65o"
 
 [node name="FoodResource" type="Node2D" unique_id=982183574]
 script = ExtResource("1_ruv7f")
+food = SubResource("Resource_oqoql")
+max_chunks = -1
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1831289810]
 unique_name_in_owner = true

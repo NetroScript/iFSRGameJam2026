@@ -11,7 +11,7 @@ signal resource_removed(available_chunks: int)
 
 @export_group("Resources")
 ## The food contained in this food resource
-@export var food: Food
+@export var food: Food = null
 ## Maximum number of chunks this food resource can contain.
 ## Equals to number of bites the ants can maximally take.
 @export var max_chunks: int = 100
@@ -20,7 +20,16 @@ signal resource_removed(available_chunks: int)
 @onready var sprite_2d: Sprite2D = %Sprite2D
 
 @onready var available_chunks: int = max_chunks
-@onready var original_scale := sprite_2d.scale
+var original_scale: Vector2
+
+var world_level: WorldLevel = null
+
+func _ready() -> void:
+	if not is_instance_valid(food):
+		return
+	sprite_2d.texture = food.world_texture
+	original_scale = sprite_2d.scale
+
 
 func add_resource(amount: int) -> void:
 	available_chunks += amount
@@ -33,6 +42,9 @@ func remove_resource(amount: int) -> Food:
 	if available_chunks == 0:
 		queue_free()
 		return null
+	if not is_instance_valid(food):
+		push_error("[%s] Invalid food reference while trying to remove resource." % get_path())
+		return
 	var chunks_taken = min(available_chunks, amount)
 	available_chunks -= chunks_taken
 	Gamestate.resources_collected(floori(food.calories * chunks_taken))
@@ -53,3 +65,12 @@ func _adapt_sprite_scale() -> void:
 	var ratio := float(available_chunks) / float(max_chunks)
 	ratio = clamp(ratio, 0.0, 1.0)
 	sprite_2d.scale = original_scale * ratio
+
+
+func assign_food(new_food: Food, new_max_chunks: int, new_scale: float) -> void:
+	if new_food == null:
+		push_error("[%s] Assigned food is invalid." % get_path())
+		return
+	food = new_food
+	max_chunks = new_max_chunks
+	scale = Vector2(new_scale, new_scale)
