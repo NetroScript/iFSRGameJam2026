@@ -13,6 +13,7 @@ func _ready() -> void:
 	timer.wait_time = bite_interval
 	timer.one_shot = false
 	timer.timeout.connect(_on_timer_timeout)
+	Gamestate.start_run()
 
 
 func _process(delta: float) -> void:
