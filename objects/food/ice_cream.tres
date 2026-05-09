@@ -1,9 +1,13 @@
 [gd_resource type="Resource" script_class="Food" format=3 uid="uid://cfi8cmlcclgej"]
 
 [ext_resource type="Script" uid="uid://b6ui0t4vvd65o" path="res://scripts/food.gd" id="1_mdrff"]
+[ext_resource type="Texture2D" uid="uid://d1rg2q3ckwker" path="res://tmp/ice_cream_ants_own.png" id="2_3p00p"]
 
 [resource]
 script = ExtResource("1_mdrff")
+world_texture = ExtResource("2_3p00p")
 name = "Ice Cream"
 calories = 40.0
+min_range = 0.8
+world_texture_scale_with_chunk_size = Vector2(0.5, 1.5)
 metadata/_custom_type_script = "uid://b6ui0t4vvd65o"

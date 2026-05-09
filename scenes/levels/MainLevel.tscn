@@ -6,6 +6,12 @@
 [ext_resource type="PackedScene" uid="uid://b3fgi2u127m3m" path="res://objects/ant_hill/ant_hill.tscn" id="5_8gv0l"]
 [ext_resource type="PackedScene" uid="uid://bvow5th5sfs6k" path="res://scenes/gui/Popups/score_display.tscn" id="6_214bh"]
 [ext_resource type="Shader" uid="uid://c0bd1h1td3wgo" path="res://shaders/GroupOutline.gdshader" id="6_dnftk"]
+[ext_resource type="PackedScene" uid="uid://bt168vtxc4ivy" path="res://objects/food_spawner/food_spawner.tscn" id="7_32pff"]
+[ext_resource type="Script" uid="uid://bgf4nes74b8xq" path="res://scripts/food_spawn_settings.gd" id="8_fpd5e"]
+[ext_resource type="Resource" uid="uid://cfi8cmlcclgej" path="res://objects/food/ice_cream.tres" id="9_xw3i5"]
+[ext_resource type="Resource" uid="uid://2finpia0gf4c" path="res://objects/food/sugar.tres" id="10_qb1ua"]
+[ext_resource type="Resource" uid="uid://dfxg0us40l313" path="res://objects/food/apple.tres" id="11_1x1s3"]
+[ext_resource type="Resource" uid="uid://begqeao52xma4" path="res://objects/food/cake.tres" id="12_viy5o"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_khjcj"]
 shader = ExtResource("1_n80gm")
@@ -31,6 +37,30 @@ shader_parameter/grid_data_strength = 0.45
 shader = ExtResource("6_dnftk")
 shader_parameter/line_colour = Color(1, 1, 1, 1)
 shader_parameter/line_thickness = 1
+
+[sub_resource type="Resource" id="Resource_qb1ua"]
+script = ExtResource("8_fpd5e")
+food = ExtResource("9_xw3i5")
+amount = 20
+metadata/_custom_type_script = "uid://bgf4nes74b8xq"
+
+[sub_resource type="Resource" id="Resource_qd7ug"]
+script = ExtResource("8_fpd5e")
+food = ExtResource("10_qb1ua")
+amount = 80
+metadata/_custom_type_script = "uid://bgf4nes74b8xq"
+
+[sub_resource type="Resource" id="Resource_7j3l0"]
+script = ExtResource("8_fpd5e")
+food = ExtResource("11_1x1s3")
+amount = 60
+metadata/_custom_type_script = "uid://bgf4nes74b8xq"
+
+[sub_resource type="Resource" id="Resource_dt23x"]
+script = ExtResource("8_fpd5e")
+food = ExtResource("12_viy5o")
+amount = 30
+metadata/_custom_type_script = "uid://bgf4nes74b8xq"
 
 [node name="LevelWorld" type="Node2D" unique_id=1951313060 node_paths=PackedStringArray("ant_highlight")]
 script = ExtResource("1_8gv0l")
@@ -70,3 +100,7 @@ spawn_distance_range = Vector2i(5, 15)
 [node name="CanvasGroup" type="CanvasGroup" parent="." unique_id=2042567969]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_3ijqg")
+
+[node name="FoodSpawner" parent="." unique_id=1683386492 node_paths=PackedStringArray("world_level") instance=ExtResource("7_32pff")]
+spawn_entries = Array[ExtResource("8_fpd5e")]([SubResource("Resource_qb1ua"), SubResource("Resource_qd7ug"), SubResource("Resource_7j3l0"), SubResource("Resource_dt23x")])
+world_level = NodePath("..")

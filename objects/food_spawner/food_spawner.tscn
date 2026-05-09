@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bt168vtxc4ivy"]
+
+[ext_resource type="Script" uid="uid://bxdcs466yo6vh" path="res://scripts/entities/food_spawner.gd" id="1_lnyhh"]
+[ext_resource type="Script" uid="uid://bgf4nes74b8xq" path="res://scripts/food_spawn_settings.gd" id="2_kklca"]
+[ext_resource type="Resource" uid="uid://dfxg0us40l313" path="res://objects/food/apple.tres" id="3_yjb0j"]
+[ext_resource type="Resource" uid="uid://2finpia0gf4c" path="res://objects/food/sugar.tres" id="4_bmkqb"]
+[ext_resource type="Resource" uid="uid://cfi8cmlcclgej" path="res://objects/food/ice_cream.tres" id="5_kipbr"]
+[ext_resource type="Resource" uid="uid://begqeao52xma4" path="res://objects/food/cake.tres" id="6_xmebt"]
+
+[sub_resource type="Resource" id="Resource_o4w0h"]
+script = ExtResource("2_kklca")
+food = ExtResource("3_yjb0j")
+amount = 30
+metadata/_custom_type_script = "uid://bgf4nes74b8xq"
+
+[sub_resource type="Resource" id="Resource_n1unt"]
+script = ExtResource("2_kklca")
+food = ExtResource("4_bmkqb")
+amount = 40
+metadata/_custom_type_script = "uid://bgf4nes74b8xq"
+
+[sub_resource type="Resource" id="Resource_6m20j"]
+script = ExtResource("2_kklca")
+food = ExtResource("5_kipbr")
+amount = 10
+metadata/_custom_type_script = "uid://bgf4nes74b8xq"
+
+[sub_resource type="Resource" id="Resource_q8w03"]
+script = ExtResource("2_kklca")
+food = ExtResource("6_xmebt")
+amount = 20
+metadata/_custom_type_script = "uid://bgf4nes74b8xq"
+
+[node name="FoodSpawner" type="Node2D" unique_id=1683386492]
+script = ExtResource("1_lnyhh")
+spawn_entries = Array[ExtResource("2_kklca")]([SubResource("Resource_o4w0h"), SubResource("Resource_n1unt"), SubResource("Resource_6m20j"), SubResource("Resource_q8w03")])

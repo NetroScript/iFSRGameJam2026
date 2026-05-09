@@ -40,7 +40,7 @@ func phero_dir(pos: Vector2i, phero: Pheromone) -> Vector2:
 
 	if pos.y > 0:          _check_cell(pos.x, pos.y - 1, phero, Vector2(0, -1))
 	if pos.y < size.y - 1: _check_cell(pos.x, pos.y + 1, phero, Vector2(0,  1))
-		
+
 	if pos.x < size.x - 1:
 		if pos.y > 0:          _check_cell(pos.x + 1, pos.y - 1, phero, Vector2(SQRT2, -SQRT2))
 		if true:               _check_cell(pos.x + 1, pos.y    , phero, Vector2(    1,      0))
