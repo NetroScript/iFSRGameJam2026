@@ -59,3 +59,7 @@ func step(world: World, steering: Vector2):
 	# Update pheromones.
 	if leave_trail:
 		world.put_phero(pos.x, pos.y, 1 - goal, phero_stren)
+
+func carried_food_res(world: World) -> FoodResource:
+	if food_id == World.ITEM_NONE: return null
+	return world.food_items[food_id]
