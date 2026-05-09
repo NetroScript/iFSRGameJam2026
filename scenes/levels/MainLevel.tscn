@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://drpw00y8jdltm" path="res://objects/Ant.tscn" id="1_wmnte"]
 [ext_resource type="Texture2D" uid="uid://mfgiul3ckqos" path="res://assets/images/pixel.png" id="2_7q8md"]
 [ext_resource type="PackedScene" uid="uid://b3fgi2u127m3m" path="res://objects/ant_hill/ant_hill.tscn" id="5_8gv0l"]
+[ext_resource type="PackedScene" uid="uid://bvow5th5sfs6k" path="res://scenes/gui/Popups/score_display.tscn" id="6_214bh"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_khjcj"]
 shader = ExtResource("1_n80gm")
@@ -33,7 +34,7 @@ world_border_color = Color(0.012617188, 0.010481979, 0.0006468763, 0.9019608)
 world_border_width = 16.0
 draw_editor_grid_lines = true
 editor_grid_line_color = Color(0, 0.21176471, 0.26666668, 0.5647059)
-min_camera_zoom = 0.09999999999999999
+min_camera_zoom = 0.1
 max_camera_zoom = 1.5
 
 [node name="WorldCamera" type="Camera2D" parent="." unique_id=374224128]
@@ -53,3 +54,9 @@ position = Vector2(349, 78)
 world_level = NodePath("..")
 spawn_range = Vector2i(300, 500)
 spawn_distance_range = Vector2i(5, 15)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1747078099]
+
+[node name="ScoreDisplay" parent="CanvasLayer" unique_id=1210247731 instance=ExtResource("6_214bh")]
+size_flags_horizontal = 3
+size_flags_vertical = 3

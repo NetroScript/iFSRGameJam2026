@@ -2,7 +2,7 @@
 class_name WorldLevel
 extends Node2D
 
-@export 
+@export
 var grid_size: = Vector2i(200, 200):
 	set(value):
 		grid_size = value
@@ -92,6 +92,7 @@ var _camera_drag_last_position := Vector2.ZERO
 func _ready() -> void:
 	_recreate_world()
 	_setup_world_camera()
+	Gamestate.start_run()
 
 func _notification(what: int) -> void:
 	if not Engine.is_editor_hint():
