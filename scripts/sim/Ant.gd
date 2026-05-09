@@ -1,10 +1,11 @@
 class_name SimAnt extends Resource
 
 var heading: Vector2
-var pos: Vector2i
+var pos:     Vector2i
 
-var goal := World.Pheromone.Food
-var food_id := World.NO_FOOD
+var goal        := World.Pheromone.Food
+var leave_trail := true
+var food_id     := World.NO_FOOD
 var start_t: int
 
 const PHERO_MAX := World.PHERO_MAX
@@ -15,11 +16,11 @@ func _init():
 
 func step(world: World, steering: Vector2):
 	# Move.
-	if steering.is_equal_approx(Vector2.ZERO):
+	if steering == Vector2.ZERO:
 		heading = (heading + world.phero_dir(pos, goal)).normalized()
 	else: heading = steering
 
-	if heading.is_equal_approx(Vector2(0, 0)): heading = Vector2.from_angle(randf_range(0, TAU))
+	if heading == Vector2.ZERO: heading = Vector2.from_angle(randf_range(0, TAU))
 	else: heading = heading.rotated(randfn(0, PI/32))
 
 	const THRESH = sin(TAU/16)
@@ -33,10 +34,11 @@ func step(world: World, steering: Vector2):
 	var phero_stren = PHERO_MAX - 2*(Time.get_ticks_msec() - start_t)
 
 	if pos == world.nest: # Returned to nest
-		food_id = World.NO_FOOD
-		goal = World.Pheromone.Food
-		heading = Vector2.ZERO
-		start_t = Time.get_ticks_msec()
+		food_id     = World.NO_FOOD
+		goal        = World.Pheromone.Food
+		leave_trail = true
+		heading     = Vector2.ZERO
+		start_t     = Time.get_ticks_msec()
 		phero_stren = PHERO_MAX
 
 	if food_id == World.NO_FOOD:
@@ -44,14 +46,17 @@ func step(world: World, steering: Vector2):
 		if food != World.NO_FOOD: # Found food
 			food_id = food
 			world.put_food(pos.x, pos.y, World.NO_FOOD)
-			goal = World.Pheromone.Home
-			heading = -heading
-			start_t = Time.get_ticks_msec()
+			goal        = World.Pheromone.Home
+			leave_trail = true
+			heading     = -heading
+			start_t     = Time.get_ticks_msec()
 			phero_stren = PHERO_MAX
 		elif goal == World.Pheromone.Food and phero_stren < PHERO_MIN: # Give up
-			goal = World.Pheromone.Home
-			heading = -heading
+			goal        = World.Pheromone.Home
+			leave_trail = false
+			heading     = -heading
 
 	if steering != Vector2.ZERO: phero_stren *= 5 # Boost controlled ant.
 	# Update pheromones.
-	world.put_phero(pos.x, pos.y, 1 - goal, phero_stren)
+	if leave_trail:
+		world.put_phero(pos.x, pos.y, 1 - goal, phero_stren)
