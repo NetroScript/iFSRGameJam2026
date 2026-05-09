@@ -51,6 +51,30 @@ var editor_grid_line_step := 1:
 		editor_grid_line_step = maxi(1, value)
 		queue_redraw()
 
+@export
+var draw_ant_hill_grid_cells := false:
+	set(value):
+		draw_ant_hill_grid_cells = value
+		queue_redraw()
+
+@export
+var ant_hill_grid_cell_fill_color := Color(1.0, 0.82, 0.18, 0.28):
+	set(value):
+		ant_hill_grid_cell_fill_color = value
+		queue_redraw()
+
+@export
+var ant_hill_grid_cell_outline_color := Color(1.0, 0.95, 0.3, 0.9):
+	set(value):
+		ant_hill_grid_cell_outline_color = value
+		queue_redraw()
+
+@export_range(1.0, 20.0, 0.5)
+var ant_hill_grid_cell_outline_width := 3.0:
+	set(value):
+		ant_hill_grid_cell_outline_width = value
+		queue_redraw()
+
 @export_group("Shader Grid Data")
 @export
 var send_grid_data_to_background_shader := true:
@@ -380,6 +404,12 @@ func _draw() -> void:
 	if draw_editor_grid_lines and Engine.is_editor_hint():
 		_draw_editor_grid(world_rect)
 
+	if draw_ant_hill_grid_cells:
+		if Engine.is_editor_hint():
+			_draw_ant_hill_debug_cells()
+		else:
+			_draw_item_grid_cells(World.ITEM_NEST, ant_hill_grid_cell_fill_color, ant_hill_grid_cell_outline_color, ant_hill_grid_cell_outline_width)
+
 	if draw_world_border:
 		draw_rect(world_rect, world_border_color, false, world_border_width)
 
@@ -404,6 +434,48 @@ func _draw_editor_grid(world_rect: Rect2) -> void:
 			editor_grid_line_color,
 			line_width
 		)
+
+func debug_highlight_ant_hill_cells(enabled := true) -> void:
+	draw_ant_hill_grid_cells = enabled
+	queue_redraw()
+
+func _draw_item_grid_cells(item_id: int, fill_color: Color, outline_color: Color, outline_width: float) -> void:
+	if world == null or world.int_data.is_empty():
+		return
+
+	for y in range(world.size.y):
+		for x in range(world.size.x):
+			if world.get_int(x, y, World.IntField.Item) != item_id:
+				continue
+
+			var rect := _cell_to_local_rect(Vector2i(x, y))
+			draw_rect(rect, fill_color, true)
+			draw_rect(rect, outline_color, false, outline_width)
+
+func _draw_ant_hill_debug_cells() -> void:
+	for ant_hill in _get_all_ant_hills():
+		for cell in ant_hill.get_nest_cells():
+			var rect := _cell_to_local_rect(cell)
+			draw_rect(rect, ant_hill_grid_cell_fill_color, true)
+			draw_rect(rect, ant_hill_grid_cell_outline_color, false, ant_hill_grid_cell_outline_width)
+
+func _get_all_ant_hills() -> Array[AntHill]:
+	var ant_hills: Array[AntHill] = []
+	_collect_ant_hills(self, ant_hills)
+	return ant_hills
+
+func _collect_ant_hills(node: Node, ant_hills: Array[AntHill]) -> void:
+	if node is AntHill:
+		ant_hills.append(node as AntHill)
+
+	for child in node.get_children():
+		_collect_ant_hills(child, ant_hills)
+
+func _cell_to_local_rect(cell: Vector2i) -> Rect2:
+	var rect := _world_rect()
+	var clamped_cell := clamp_cell(cell)
+	var local_position := rect.position + Vector2(clamped_cell) * Vector2(cell_size)
+	return Rect2(local_position, Vector2(cell_size))
 
 func _update_background_shader(update_grid_texture := false) -> void:
 	if not is_inside_tree() or not is_instance_valid(grid_background):
@@ -564,6 +636,9 @@ func _process(_delta: float) -> void:
 		if should_update_grid_texture:
 			_grid_data_dirty = true
 		_update_background_shader(should_update_grid_texture)
+
+	if draw_ant_hill_grid_cells:
+		queue_redraw()
 
 
 func _should_update_grid_data_texture(delta: float) -> bool:
