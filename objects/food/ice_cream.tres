@@ -1,11 +1,13 @@
 [gd_resource type="Resource" script_class="Food" format=3 uid="uid://cfi8cmlcclgej"]
 
+[ext_resource type="Texture2D" uid="uid://bfx7eacxb0n65" path="res://assets/images/food/IcecreamCone_carried.png" id="1_2eyrq"]
 [ext_resource type="Script" uid="uid://b6ui0t4vvd65o" path="res://scripts/food.gd" id="1_mdrff"]
-[ext_resource type="Texture2D" uid="uid://d1rg2q3ckwker" path="res://tmp/ice_cream_ants_own.png" id="2_3p00p"]
+[ext_resource type="Texture2D" uid="uid://dqqlurpsqm44x" path="res://assets/images/food/IcecreamCone_world.png" id="3_mhpix"]
 
 [resource]
 script = ExtResource("1_mdrff")
-world_texture = ExtResource("2_3p00p")
+world_texture = ExtResource("3_mhpix")
+particle_texture = ExtResource("1_2eyrq")
 name = "Ice Cream"
 calories = 40.0
 min_range = 0.8

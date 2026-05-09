@@ -108,7 +108,7 @@ var _target_position := Vector2.ZERO
 var _move_speed := 0.0
 var _sim_ant: SimAnt
 var _behavior_ready := false
-var _carried_food: FoodResource = null
+var _carried_food: Food = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -427,12 +427,13 @@ func _on_target_reached() -> void:
 		var currently_carried_food := _sim_ant.carried_food_res(_world)
 		if currently_carried_food != null and _carried_food == null:
 			_collect_resource(currently_carried_food)
-			print("Ant %s collected food resource %s" % [self.get_instance_id(), currently_carried_food.food.name])
+			if _carried_food != null:
+				print("Ant %s collected food resource %s" % [self.get_instance_id(), _carried_food.name])
 		else:
 			print("Ant %s found food but failed to collect it" % self.get_instance_id())
 	
 	elif event == SimAnt.Event.FoundNest and _carried_food != null:
-		print("Ant %s deposited food resource %s at nest" % [self.get_instance_id(), _carried_food.food.name])
+		print("Ant %s deposited food resource %s at nest" % [self.get_instance_id(), _carried_food.name])
 		_deposit_food()
 	
 	_choose_next_target()
@@ -442,9 +443,12 @@ func _collect_resource(resource: FoodResource) -> void:
 	if resource == null or _carried_food != null or not is_instance_valid(resource):
 		return
 	
-	resource.remove_resource(1)
-	_carried_food = resource
-	carried_food_particle.texture = resource.food.particle_texture
+	var collected_food := resource.remove_resource(1)
+	if collected_food == null:
+		return
+
+	_carried_food = collected_food
+	carried_food_particle.texture = collected_food.particle_texture
 	carried_food_particle.offset_transform_rotation = deg_to_rad(_rng.randf_range(0.0, 360.0))
 	carried_food_particle.visible = true
 
@@ -457,7 +461,7 @@ func _deposit_food() -> void:
 	if _carried_food == null:
 		return
 
-	_home_hill.add_resource(_carried_food.food)
+	_home_hill.add_resource(_carried_food)
 	_carried_food = null
 	carried_food_particle.visible = false
 	carried_food_particle.texture = null
