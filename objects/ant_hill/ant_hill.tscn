@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b3fgi2u127m3m"]
 
-[ext_resource type="Script" uid="uid://cy0cuuxu70mj6" path="res://objects/ant_hill/ant_hill.gd" id="1_l2c41"]
+[ext_resource type="Script" uid="uid://cy0cuuxu70mj6" path="res://scripts/entities/ant_hill.gd" id="1_l2c41"]
 [ext_resource type="Texture2D" uid="uid://xmatx321ndry" path="res://tmp/ant_hill_own.jpg" id="2_p5lff"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l2c41"]

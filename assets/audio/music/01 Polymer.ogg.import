@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bcjhoovka3gpx"
+path="res://.godot/imported/01 Polymer.ogg-bada607a5e4ea88399b87d62e0fa4304.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/audio/music/01 Polymer.ogg"
+dest_files=["res://.godot/imported/01 Polymer.ogg-bada607a5e4ea88399b87d62e0fa4304.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://dpshk117iqnh8"]
+
+[ext_resource type="Script" uid="uid://dc2eyfsh83f21" path="res://scripts/sim/WorldLevel.gd" id="1_8gv0l"]
+[ext_resource type="Shader" uid="uid://b3yp6vqctwbqu" path="res://shaders/MapBackground.gdshader" id="1_n80gm"]
+[ext_resource type="PackedScene" uid="uid://drpw00y8jdltm" path="res://objects/Ant.tscn" id="1_wmnte"]
+[ext_resource type="Texture2D" uid="uid://mfgiul3ckqos" path="res://assets/images/pixel.png" id="2_7q8md"]
+[ext_resource type="PackedScene" uid="uid://b3fgi2u127m3m" path="res://objects/ant_hill/ant_hill.tscn" id="5_8gv0l"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_khjcj"]
+shader = ExtResource("1_n80gm")
+shader_parameter/base_color = Color(0, 0.14509805, 0.07058824, 1)
+shader_parameter/grain_strength = 0.01600000076
+shader_parameter/medium_strength = 0.022000001045
+shader_parameter/large_strength = 0.0110000005225
+shader_parameter/grain_scale = 0.315
+shader_parameter/medium_scale = 0.263
+shader_parameter/large_scale = -0.001
+shader_parameter/shadow_tint = Color(4.165, 4.165, 4.165, 1)
+shader_parameter/highlight_tint = Color(1.08, 1.08, 1.08, 1)
+shader_parameter/show_grid_data = true
+shader_parameter/grid_world_rect = Vector4(-10000, -10000, 20000, 20000)
+shader_parameter/grid_resolution = Vector2i(200, 200)
+shader_parameter/grid_cell_size = Vector2(100, 100)
+shader_parameter/grid_field_count = 2
+shader_parameter/grid_timestamp_ms = 0.0
+shader_parameter/grid_phero_max = 30000.0
+shader_parameter/grid_data_strength = 0.45
+
+[node name="LevelWorld" type="Node2D" unique_id=1951313060]
+script = ExtResource("1_8gv0l")
+draw_world_border = true
+world_border_color = Color(0.012617188, 0.010481979, 0.0006468763, 0.9019608)
+world_border_width = 16.0
+draw_editor_grid_lines = true
+editor_grid_line_color = Color(0, 0.21176471, 0.26666668, 0.5647059)
+min_camera_zoom = 0.09999999999999999
+max_camera_zoom = 1.5
+
+[node name="WorldCamera" type="Camera2D" parent="." unique_id=374224128]
+unique_name_in_owner = true
+
+[node name="GridBackground" type="Sprite2D" parent="." unique_id=1485788841]
+unique_name_in_owner = true
+z_index = -1
+material = SubResource("ShaderMaterial_khjcj")
+scale = Vector2(20000, 20000)
+texture = ExtResource("2_7q8md")
+
+[node name="Ant" parent="." unique_id=312714327 instance=ExtResource("1_wmnte")]
+position = Vector2(349, 78)
+
+[node name="AntHill" parent="." unique_id=92062608 node_paths=PackedStringArray("world_level") instance=ExtResource("5_8gv0l")]
+world_level = NodePath("..")
+spawn_range = Vector2i(300, 500)
+spawn_distance_range = Vector2i(5, 15)
