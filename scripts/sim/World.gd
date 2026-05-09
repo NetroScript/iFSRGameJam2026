@@ -62,24 +62,24 @@ func put_phero(x: int, y: int, phero: Pheromone, strength: int):
 	var new = Time.get_ticks_msec() - PHERO_MAX + strength
 	set_int(x, y, IntField.PheroBase + phero, max(current, new))
 
+func _food_aabb_world(food: FoodResource, level: WorldLevel) -> Rect2:
+	var aabb := food.sprite_2d.get_rect()
+	return Rect2(
+		food.sprite_2d.to_global(aabb.position),
+		aabb.size * food.sprite_2d.scale / Vector2(level.cell_size)
+	)
 func add_food(food: FoodResource, level: WorldLevel):
 	food_items.push_back(food)
-	var aabb := food.sprite_2d.get_rect()
-	add_world_item(
-		Rect2(
-			food.sprite_2d.to_global(aabb.position),
-			aabb.size * food.sprite_2d.scale / Vector2(level.cell_size)
-		),
-		level,
-		food_items.size() - 1,
-	)
-func add_world_item(aabb: Rect2, level: WorldLevel, item: int):
+	put_world_item(_food_aabb_world(food, level), level, food_items.size() - 1)
+func clear_food(food: FoodResource, level: WorldLevel):
+	put_world_item(_food_aabb_world(food, level), level, ITEM_NONE)
+func put_world_item(aabb: Rect2, level: WorldLevel, item: int):
 	var size = aabb.size / Vector2(level.cell_size)
-	add_item(
+	put_item(
 		Rect2i(level.world_position_to_cell(aabb.position) - Vector2i(size/2), size),
 		item,
 	)
-func add_item(aabb: Rect2i, id: int):
+func put_item(aabb: Rect2i, id: int):
 	print("Add item %s at %s}" % [id, aabb])
 	for y in range(aabb.position.y, aabb.end.y):
 		for x in range(aabb.position.x, aabb.end.x):

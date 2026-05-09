@@ -110,7 +110,7 @@ func _spawn_start_ants() -> void:
 
 	_start_ants_spawned = true
 	var size = %Sprite2D.get_rect().size * %Sprite2D.scale
-	world_level.world.add_world_item(Rect2(global_position, size), world_level, World.ITEM_NEST)
+	world_level.world.put_world_item(Rect2(global_position, size), world_level, World.ITEM_NEST)
 	var spawn_count := _rng.randi_range(mini(spawn_range.x, spawn_range.y), maxi(spawn_range.x, spawn_range.y))
 	for i in range(spawn_count):
 		var ant := ant_scene.instantiate() as Ant
