@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b3fgi2u127m3m"]
 
 [ext_resource type="Script" uid="uid://cy0cuuxu70mj6" path="res://scripts/entities/ant_hill.gd" id="1_l2c41"]
-[ext_resource type="Texture2D" uid="uid://xmatx321ndry" path="res://tmp/ant_hill_own.jpg" id="2_p5lff"]
+[ext_resource type="Texture2D" uid="uid://cul0w0212stlh" path="res://assets/images/Ant Hill.png" id="2_p5lff"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l2c41"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
@@ -21,7 +21,6 @@ unique_name_in_owner = true
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=454199519]
 unique_name_in_owner = true
-scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_p5lff")
 
 [node name="ResourceBar" type="ProgressBar" parent="." unique_id=170401777]
