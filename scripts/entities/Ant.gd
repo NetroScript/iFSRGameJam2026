@@ -404,13 +404,21 @@ func _update_grid_behavior(delta: float) -> void:
 		return
 
 	var to_target := _target_position - global_position
-	if to_target.length() <= arrive_distance:
+	var distance_to_target := to_target.length()
+	if distance_to_target <= arrive_distance:
 		global_position = _target_position
 		_on_target_reached()
 		return
 
-	var direction := to_target.normalized()
-	global_position += direction * _move_speed * delta
+	var direction := to_target / distance_to_target
+	var move_distance := _move_speed * delta
+	if move_distance >= distance_to_target:
+		global_position = _target_position
+		rotation = direction.angle() + PI * 0.5
+		_on_target_reached()
+		return
+
+	global_position += direction * move_distance
 	rotation = direction.angle() + PI * 0.5
 
 
