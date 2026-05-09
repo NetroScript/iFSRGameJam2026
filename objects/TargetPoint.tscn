@@ -3,6 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://b3shu75tkiwe1" path="res://assets/images/dort-logo.png" id="1_yg5qu"]
 
 [sub_resource type="FontFile" id="FontFile_xdfhs"]
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
 cache/0/variation_coordinates = {}
 cache/0/face_index = 0
 cache/0/embolden = 0.0
@@ -391,6 +394,7 @@ outline_color = Color(0, 0.007843138, 0.35686275, 1)
 [node name="TargetPoint" type="Node2D" unique_id=973751885]
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=669223806]
+modulate = Color(1, 1, 1, 0.40392157)
 position = Vector2(0, -93)
 scale = Vector2(0.46302807, 0.46302807)
 texture = ExtResource("1_yg5qu")
