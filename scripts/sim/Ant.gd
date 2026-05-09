@@ -54,5 +54,4 @@ func step(world: World, steering: Vector2):
 
 	if steering != Vector2.ZERO: phero_stren *= 5 # Boost controlled ant.
 	# Update pheromones.
-	#if phero_stren > PHERO_MIN:
 	world.put_phero(pos.x, pos.y, 1 - goal, phero_stren)

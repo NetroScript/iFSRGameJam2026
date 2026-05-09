@@ -16,58 +16,45 @@ func init():
 	food_id.fill(NO_FOOD)
 
 enum Pheromone {Home, Food}
+
+var max_dir: Vector2
+var max_phero: int
+func _check_cell(x: int, y: int, phero: Pheromone, dir: Vector2):
+	var stren = phero_at(x, y, phero)
+	if stren > max_phero:
+		max_phero = stren
+		max_dir = dir
+
 func phero_dir(pos: Vector2i, phero: Pheromone) -> Vector2:
 	const SQRT2 := sqrt(2)
 
 	time = Time.get_ticks_msec()
 
-	var dir := Vector2(0, 0)
-	var max := 0.0
+	max_dir   = Vector2(0, 0)
+	max_phero = 0
 	var stren: int
 	if pos.x > 0:
-		if pos.y > 0:
-			stren = phero_at(pos.x - 1, pos.y - 1, phero)
-			dir += Vector2(-SQRT2, -SQRT2) * stren
-			max = max(max, stren)
-		stren = phero_at(pos.x - 1, pos.y, phero)
-		dir += Vector2(-1, 0) * stren
-		max = max(max, stren)
-		if pos.y < size.y - 1:
-			stren = phero_at(pos.x - 1, pos.y + 1, phero)
-			dir += Vector2(-SQRT2, SQRT2) * stren
-			max = max(max, stren)
+		if pos.y > 0:          _check_cell(pos.x - 1, pos.y - 1, phero, Vector2(-SQRT2, -SQRT2))
+		if true:               _check_cell(pos.x - 1, pos.y    , phero, Vector2(    -1,      0))
+		if pos.y < size.y - 1: _check_cell(pos.x - 1, pos.y + 1, phero, Vector2(-SQRT2,  SQRT2))
 
-	if pos.y > 0:
-		stren = phero_at(pos.x, pos.y - 1, phero)
-		dir += Vector2(0, -1) * stren
-		max = max(max, stren)
-	if pos.y < size.y - 1:
-		stren = phero_at(pos.x, pos.y + 1, phero)
-		dir += Vector2(0, 1) * stren
-		max = max(max, stren)
+	if pos.y > 0:          _check_cell(pos.x, pos.y - 1, phero, Vector2(0, -1))
+	if pos.y < size.y - 1: _check_cell(pos.x, pos.y + 1, phero, Vector2(0,  1))
 		
 	if pos.x < size.x - 1:
-		if pos.y > 0:
-			stren = phero_at(pos.x + 1, pos.y - 1, phero)
-			dir += Vector2(SQRT2, -SQRT2) * stren
-			max = max(max, stren)
-			
-		stren = phero_at(pos.x + 1, pos.y, phero)
-		dir += Vector2(1, 0) * stren
-		max = max(max, stren)
-		
-		if pos.y < size.y - 1:
-			stren = phero_at(pos.x + 1, pos.y + 1, phero)
-			dir += Vector2(SQRT2, SQRT2) * stren
-			max = max(max, stren)
+		if pos.y > 0:          _check_cell(pos.x + 1, pos.y - 1, phero, Vector2(SQRT2, -SQRT2))
+		if true:               _check_cell(pos.x + 1, pos.y    , phero, Vector2(    1,      0))
+		if pos.y < size.y - 1: _check_cell(pos.x + 1, pos.y + 1, phero, Vector2(SQRT2,  SQRT2))
 
-	var weight = float(max) / PHERO_MAX
-	return dir.normalized()# * weight
+	var weight = float(max_phero) / PHERO_MAX
+	return max_dir * weight
 
 func phero_at(x: int, y: int, phero: Pheromone) -> int:
 	return max(0, PHERO_MAX - (time - get_int(x, y, IntField.PheroBase + phero)))
 func put_phero(x: int, y: int, phero: Pheromone, strength: int):
-	set_int(x, y, IntField.PheroBase + phero, Time.get_ticks_msec() - PHERO_MAX + strength)
+	var current = get_int(x, y, IntField.PheroBase + phero)
+	var new = Time.get_ticks_msec() - PHERO_MAX + strength
+	set_int(x, y, IntField.PheroBase + phero, max(current, new))
 
 func food_at(x: int, y: int) -> int:
 	return food_id[y * size.x + x]
