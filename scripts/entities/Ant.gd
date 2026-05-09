@@ -17,6 +17,9 @@ extends Node2D
 @onready var antenna_left: Polygon2D = %AntennaLeft
 @onready var antenna_right: Polygon2D = %AntennaRight
 
+@onready var carried_food_particle: TextureRect = %CarriedFoodParticle
+
+
 @export_category("Animation")
 @export var animate_on_ready := true
 @export var animate_in_editor := false:
@@ -105,6 +108,7 @@ var _target_position := Vector2.ZERO
 var _move_speed := 0.0
 var _sim_ant: SimAnt
 var _behavior_ready := false
+var _carried_food: FoodResource = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -415,14 +419,48 @@ func _on_target_reached() -> void:
 		return
 
 	_sim_ant.pos = _world_level.world_position_to_cell(global_position)
-	var carried_food_id := _sim_ant.food_id
-	_sim_ant.step(_world, _get_player_control_direction())
+	var event := _sim_ant.step(_world, _get_player_control_direction())
 	_grid_cell = _sim_ant.pos
 
-	if carried_food_id != World.ITEM_NONE and _sim_ant.food_id == World.ITEM_NONE:
-		_deposit_food(carried_food_id)
+	if event == SimAnt.Event.FoundFood:
+
+		var currently_carried_food := _sim_ant.carried_food_res(_world)
+		if currently_carried_food != null and _carried_food == null:
+			_collect_resource(currently_carried_food)
+			print("Ant %s collected food resource %s" % [self.get_instance_id(), currently_carried_food.food.name])
+		else:
+			print("Ant %s found food but failed to collect it" % self.get_instance_id())
+	
+	elif event == SimAnt.Event.FoundNest and _carried_food != null:
+		print("Ant %s deposited food resource %s at nest" % [self.get_instance_id(), _carried_food.food.name])
+		_deposit_food()
 	
 	_choose_next_target()
+
+
+func _collect_resource(resource: FoodResource) -> void:
+	if resource == null or _carried_food != null or not is_instance_valid(resource):
+		return
+	
+	resource.remove_resource(1)
+	_carried_food = resource
+	carried_food_particle.texture = resource.food.particle_texture
+	carried_food_particle.offset_transform_rotation = deg_to_rad(_rng.randf_range(0.0, 360.0))
+	carried_food_particle.visible = true
+
+
+
+func _deposit_food() -> void:
+	if _home_hill == null or _world == null:
+		return
+
+	if _carried_food == null:
+		return
+
+	_home_hill.add_resource(_carried_food.food)
+	_carried_food = null
+	carried_food_particle.visible = false
+	carried_food_particle.texture = null
 
 
 func _choose_next_target() -> void:
@@ -447,15 +485,6 @@ func _get_player_control_direction() -> Vector2:
 
 	return direction.normalized()
 
-
-func _deposit_food(food_id: int) -> void:
-	if _home_hill == null or _world == null:
-		return
-
-	if food_id < 0 or food_id >= _world.food_instances.size():
-		return
-
-	_home_hill.add_resource(_world.food_instances[food_id])
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
