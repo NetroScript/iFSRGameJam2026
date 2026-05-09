@@ -3,6 +3,16 @@
 [sub_resource type="Theme" id="Theme_jes8i"]
 default_font_size = 30
 
+[sub_resource type="GDScript" id="GDScript_negdo"]
+script/source = "extends Button
+
+func _pressed() -> void:
+	var loaded_scene: Node = get_tree().root.get_node(^\"MainStage/LoadedScene\")
+	loaded_scene.get_child(0).visible = false
+	var main_level := preload(\"res://scenes/levels/MainLevel.tscn\")
+	loaded_scene.add_child(main_level.instantiate())
+"
+
 [sub_resource type="GDScript" id="GDScript_n3jsm"]
 script/source = "extends Button
 
@@ -52,6 +62,7 @@ layout_mode = 2
 mouse_default_cursor_shape = 2
 text = "Start"
 flat = true
+script = SubResource("GDScript_negdo")
 
 [node name="Options" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer" unique_id=1485929430]
 layout_mode = 2
