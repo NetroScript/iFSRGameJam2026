@@ -1,9 +1,13 @@
 [gd_resource type="Resource" script_class="Food" format=3 uid="uid://2finpia0gf4c"]
 
 [ext_resource type="Script" uid="uid://b6ui0t4vvd65o" path="res://scripts/food.gd" id="1_1wgjq"]
+[ext_resource type="Texture2D" uid="uid://dfjxdor3uw2sn" path="res://assets/images/food/Sugar_carried.png" id="1_lfk5h"]
+[ext_resource type="Texture2D" uid="uid://bespwk73q4cq8" path="res://assets/images/food/Sugar_world.png" id="3_wbeyx"]
 
 [resource]
 script = ExtResource("1_1wgjq")
+world_texture = ExtResource("3_wbeyx")
+particle_texture = ExtResource("1_lfk5h")
 name = "Sugar"
 calories = 10.0
 metadata/_custom_type_script = "uid://b6ui0t4vvd65o"
