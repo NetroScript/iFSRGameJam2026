@@ -1,11 +1,37 @@
 [gd_scene format=3 uid="uid://xc7tlwt70oxa"]
 
+[ext_resource type="PackedScene" uid="uid://drpw00y8jdltm" path="res://objects/Ant.tscn" id="1_8p6gt"]
+[ext_resource type="Texture2D" uid="uid://cul0w0212stlh" path="res://assets/images/Ant Hill.png" id="1_pykbm"]
 [ext_resource type="PackedScene" uid="uid://wckarbcnw7jo" path="res://scenes/gui/MainMenu.tscn" id="1_to7s8"]
+[ext_resource type="Shader" uid="uid://b3yp6vqctwbqu" path="res://shaders/MapBackground.gdshader" id="2_3gdp5"]
 [ext_resource type="PackedScene" uid="uid://da7q2hlv4ol03" path="res://scenes/gui/Popups/SettingsMenu.tscn" id="2_p4jr8"]
 [ext_resource type="PackedScene" uid="uid://bvow5th5sfs6k" path="res://scenes/gui/Popups/score_display.tscn" id="3_adpbt"]
+[ext_resource type="Texture2D" uid="uid://mfgiul3ckqos" path="res://assets/images/pixel.png" id="3_cqn1a"]
 [ext_resource type="AudioStream" uid="uid://ut1b582uhv2v" path="res://assets/audio/music/Master.ogg" id="3_p4jr8"]
 [ext_resource type="PackedScene" uid="uid://j20454kqnp7o" path="res://scenes/gui/Popups/CreditsPage.tscn" id="3_qsygf"]
 [ext_resource type="AudioStream" uid="uid://jvb1dc48eu5v" path="res://assets/audio/music/04 734532__sachajulien__ants-with-contact-microphones.ogg" id="4_4ityg"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_khjcj"]
+shader = ExtResource("2_3gdp5")
+shader_parameter/base_color = Color(0, 0.14509805, 0.07058824, 1)
+shader_parameter/grain_strength = 0.01600000076
+shader_parameter/medium_strength = 0.022000001045
+shader_parameter/large_strength = 0.0110000005225
+shader_parameter/grain_scale = 0.315
+shader_parameter/medium_scale = 0.263
+shader_parameter/large_scale = -0.001
+shader_parameter/shadow_tint = Color(4.165, 4.165, 4.165, 1)
+shader_parameter/highlight_tint = Color(1.08, 1.08, 1.08, 1)
+shader_parameter/show_grid_data = false
+shader_parameter/use_pheromone_texture = false
+shader_parameter/grid_world_rect = Vector4(-10000, -10000, 20000, 20000)
+shader_parameter/grid_resolution = Vector2i(200, 200)
+shader_parameter/grid_cell_size = Vector2(100, 100)
+shader_parameter/grid_field_count = 2
+shader_parameter/grid_timestamp_ms = 0.0
+shader_parameter/grid_phero_max = 180000.0
+shader_parameter/grid_data_strength = 0.7
+shader_parameter/grid_data_color_full_cells = false
 
 [sub_resource type="GDScript" id="GDScript_4ityg"]
 script/source = "extends MarginContainer
@@ -71,6 +97,44 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 [node name="LoadedScene" type="Node" parent="." unique_id=1924027610]
 unique_name_in_owner = true
+
+[node name="Main Menu Background" type="Node2D" parent="LoadedScene" unique_id=3400828]
+
+[node name="AntHill" type="Sprite2D" parent="LoadedScene/Main Menu Background" unique_id=1148080448]
+position = Vector2(270.99997, 95)
+scale = Vector2(0.26006582, 0.26006582)
+texture = ExtResource("1_pykbm")
+
+[node name="GridBackground" type="Sprite2D" parent="LoadedScene/Main Menu Background" unique_id=63962636]
+unique_name_in_owner = true
+z_index = -1
+material = SubResource("ShaderMaterial_khjcj")
+scale = Vector2(20000, 20000)
+texture = ExtResource("3_cqn1a")
+
+[node name="Ant" parent="LoadedScene/Main Menu Background" unique_id=312714327 instance=ExtResource("1_8p6gt")]
+position = Vector2(312, 321)
+idle_wander_enabled = true
+
+[node name="Ant2" parent="LoadedScene/Main Menu Background" unique_id=1524950553 instance=ExtResource("1_8p6gt")]
+position = Vector2(725, 311)
+idle_wander_enabled = true
+
+[node name="Ant3" parent="LoadedScene/Main Menu Background" unique_id=507333387 instance=ExtResource("1_8p6gt")]
+position = Vector2(895, 443)
+idle_wander_enabled = true
+
+[node name="Ant4" parent="LoadedScene/Main Menu Background" unique_id=282577724 instance=ExtResource("1_8p6gt")]
+position = Vector2(860, 188)
+idle_wander_enabled = true
+
+[node name="Ant6" parent="LoadedScene/Main Menu Background" unique_id=129945302 instance=ExtResource("1_8p6gt")]
+position = Vector2(225, 157)
+idle_wander_enabled = true
+
+[node name="Ant5" parent="LoadedScene/Main Menu Background" unique_id=880527909 instance=ExtResource("1_8p6gt")]
+position = Vector2(212, 399)
+idle_wander_enabled = true
 
 [node name="MainMenu" parent="LoadedScene" unique_id=1412661822 instance=ExtResource("1_to7s8")]
 

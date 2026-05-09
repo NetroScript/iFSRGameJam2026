@@ -81,6 +81,20 @@ extends Node2D
 @export var player_target_active := false
 @export var player_target_position := Vector2.ZERO
 
+@export_category("Idle Wander")
+@export var idle_wander_enabled := false:
+	set(value):
+		idle_wander_enabled = value
+		if _is_ready:
+			_start_idle_wander()
+			_refresh_process_enabled()
+@export_range(1.0, 2000.0, 1.0, "suffix:px/s") var idle_move_speed := 120.0
+@export_range(0.0, 1.0, 0.01) var idle_move_speed_jitter := 0.2
+@export_range(0.0, 512.0, 1.0, "suffix:px") var idle_screen_margin := 80.0
+@export_range(0.1, 64.0, 0.1, "suffix:px") var idle_arrive_distance := 8.0
+@export_range(0.0, 10.0, 0.01, "suffix:s") var idle_pause_min := 0.2
+@export_range(0.0, 10.0, 0.01, "suffix:s") var idle_pause_max := 1.4
+
 var _rng := RandomNumberGenerator.new()
 var rendered_components: Array[Polygon2D]
 var _base_rotations: Dictionary[int, float] = {}
@@ -109,6 +123,10 @@ var _move_speed := 0.0
 var _sim_ant: SimAnt
 var _behavior_ready := false
 var _carried_food: Food = null
+var _idle_wander_ready := false
+var _idle_target_position := Vector2.ZERO
+var _idle_current_speed := 0.0
+var _idle_pause_timer := 0.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -128,6 +146,8 @@ func _ready() -> void:
 	_move_speed = base_move_speed * _random_factor(move_speed_jitter)
 	if _world_level != null:
 		_start_grid_behavior()
+	elif idle_wander_enabled:
+		_start_idle_wander()
 
 
 func _notification(what: int) -> void:
@@ -220,8 +240,20 @@ func _start_grid_behavior() -> void:
 	_refresh_process_enabled()
 
 
+func _start_idle_wander() -> void:
+	if Engine.is_editor_hint() or not idle_wander_enabled or _world_level != null:
+		_idle_wander_ready = false
+		return
+
+	_idle_wander_ready = true
+	walking = true
+	_idle_current_speed = idle_move_speed * _random_factor(idle_move_speed_jitter)
+	_choose_next_idle_target()
+	_refresh_process_enabled()
+
+
 func _refresh_process_enabled() -> void:
-	set_process(_animation_running or _behavior_ready)
+	set_process(_animation_running or _behavior_ready or _idle_wander_ready)
 
 
 func _reset_component_rotations() -> void:
@@ -422,6 +454,66 @@ func _update_grid_behavior(delta: float) -> void:
 	rotation = direction.angle() + PI * 0.5
 
 
+func _update_idle_wander(delta: float) -> void:
+	if not _idle_wander_ready:
+		return
+
+	if _idle_pause_timer > 0.0:
+		_idle_pause_timer -= delta
+		if _idle_pause_timer > 0.0:
+			return
+
+	var to_target := _idle_target_position - global_position
+	var distance_to_target := to_target.length()
+	if distance_to_target <= idle_arrive_distance:
+		global_position = _idle_target_position
+		_begin_idle_pause()
+		return
+
+	var direction := to_target / distance_to_target
+	var move_distance := _idle_current_speed * delta
+	if move_distance >= distance_to_target:
+		global_position = _idle_target_position
+		rotation = direction.angle() + PI * 0.5
+		_begin_idle_pause()
+		return
+
+	global_position += direction * move_distance
+	rotation = direction.angle() + PI * 0.5
+
+
+func _begin_idle_pause() -> void:
+	_idle_pause_timer = _rng.randf_range(
+		minf(idle_pause_min, idle_pause_max),
+		maxf(idle_pause_min, idle_pause_max)
+	)
+	_idle_current_speed = idle_move_speed * _random_factor(idle_move_speed_jitter)
+	_choose_next_idle_target()
+
+
+func _choose_next_idle_target() -> void:
+	_idle_target_position = _random_point_in_viewport()
+
+
+func _random_point_in_viewport() -> Vector2:
+	var rect := get_viewport_rect()
+	var max_margin := minf(idle_screen_margin, minf(rect.size.x, rect.size.y) * 0.45)
+	var min_position := rect.position + Vector2(max_margin, max_margin)
+	var max_position := rect.end - Vector2(max_margin, max_margin)
+
+	if min_position.x > max_position.x:
+		min_position.x = rect.get_center().x
+		max_position.x = rect.get_center().x
+	if min_position.y > max_position.y:
+		min_position.y = rect.get_center().y
+		max_position.y = rect.get_center().y
+
+	return Vector2(
+		_rng.randf_range(min_position.x, max_position.x),
+		_rng.randf_range(min_position.y, max_position.y)
+	)
+
+
 func _on_target_reached() -> void:
 	if _sim_ant == null:
 		return
@@ -503,6 +595,8 @@ func _get_player_control_direction() -> Vector2:
 func _process(delta: float) -> void:
 	if _behavior_ready:
 		_update_grid_behavior(delta)
+	elif _idle_wander_ready:
+		_update_idle_wander(delta)
 	
 	if not _animation_running:
 		return

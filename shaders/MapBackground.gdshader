@@ -15,6 +15,7 @@ uniform vec3 shadow_tint : source_color = vec3(0.85, 0.90, 1.0);
 uniform vec3 highlight_tint : source_color = vec3(1.08, 1.04, 0.96);
 
 uniform bool show_grid_data = false;
+uniform bool use_pheromone_texture = false;
 uniform sampler2D grid_data_texture : filter_nearest, repeat_disable;
 uniform vec4 grid_world_rect = vec4(0.0, 0.0, 1.0, 1.0);
 uniform ivec2 grid_resolution = ivec2(1, 1);
@@ -222,7 +223,7 @@ void fragment() {
 	vec3 tint = mix(shadow_tint, highlight_tint, smoothstep(-0.15, 0.15, combined));
 
 	vec3 color = base_color.rgb * tint + combined;
-	if (show_grid_data) {
+	if (show_grid_data && use_pheromone_texture) {
 		vec3 grid_color = grid_data_color(p, !grid_data_color_full_cells);
 		float grid_alpha;
 		if (grid_data_color_full_cells) {

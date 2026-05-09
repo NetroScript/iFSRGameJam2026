@@ -11,6 +11,7 @@ script/source = "extends Button
 func _pressed() -> void:
 	var loaded_scene: Node = get_tree().root.get_node(^\"MainStage/LoadedScene\")
 	loaded_scene.get_child(0).visible = false
+	loaded_scene.get_child(1).visible = false
 	var main_level := preload(\"res://scenes/levels/MainLevel.tscn\")
 	loaded_scene.add_child(main_level.instantiate())
 "

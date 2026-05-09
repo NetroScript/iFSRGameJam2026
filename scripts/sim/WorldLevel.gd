@@ -81,6 +81,12 @@ var send_grid_data_to_background_shader := true:
 	set(value):
 		send_grid_data_to_background_shader = value
 		_update_background_shader(true)
+@export
+var use_pheromone_texture := false:
+	set(value):
+		use_pheromone_texture = value
+		_grid_data_dirty = true
+		_update_background_shader(true)
 @export_range(0.0, 60.0, 0.1, "suffix:Hz")
 var grid_data_updates_per_second := 10.0
 @export
@@ -499,10 +505,12 @@ func _update_background_shader(update_grid_texture := false) -> void:
 	_set_background_shader_parameter(material, "grid_timestamp_ms", _grid_data_timestamp_ms, true)
 	material.set_shader_parameter("grid_phero_max", float(World.PHERO_MAX))
 	material.set_shader_parameter("grid_field_count", _GRID_DATA_PHEROMONE_FIELD_COUNT)
-	material.set_shader_parameter("show_grid_data", send_grid_data_to_background_shader)
+	var should_use_pheromone_texture := send_grid_data_to_background_shader and use_pheromone_texture
+	material.set_shader_parameter("show_grid_data", should_use_pheromone_texture)
+	material.set_shader_parameter("use_pheromone_texture", should_use_pheromone_texture)
 	material.set_shader_parameter("grid_data_color_full_cells", color_full_grid_cells_with_pheromones)
 
-	if send_grid_data_to_background_shader and world != null:
+	if should_use_pheromone_texture and world != null:
 		if update_grid_texture:
 			_update_grid_data_texture()
 		if _grid_data_texture != null:
@@ -639,7 +647,7 @@ func clamp_cell(cell: Vector2i) -> Vector2i:
 func _process(_delta: float) -> void:
 	_update_camera_keyboard_pan(_delta)
 
-	if send_grid_data_to_background_shader:
+	if send_grid_data_to_background_shader and use_pheromone_texture:
 		var should_update_grid_texture := _should_update_grid_data_texture(_delta)
 		if should_update_grid_texture:
 			_grid_data_dirty = true
