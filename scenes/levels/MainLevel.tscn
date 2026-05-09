@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://dpshk117iqnh8"]
+
+[ext_resource type="Shader" uid="uid://b3yp6vqctwbqu" path="res://shaders/MapBackground.gdshader" id="1_n80gm"]
+[ext_resource type="PackedScene" uid="uid://drpw00y8jdltm" path="res://objects/Ant.tscn" id="1_wmnte"]
+[ext_resource type="Texture2D" uid="uid://mfgiul3ckqos" path="res://assets/images/pixel.png" id="2_7q8md"]
+[ext_resource type="Texture2D" uid="uid://bmjg2vypahuff" path="res://icon.svg" id="3_ar2jo"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_khjcj"]
+shader = ExtResource("1_n80gm")
+shader_parameter/base_color = Color(0, 0.14509805, 0.07058824, 1)
+shader_parameter/grain_strength = 0.01600000076
+shader_parameter/medium_strength = 0.022000001045
+shader_parameter/large_strength = 0.0110000005225
+shader_parameter/grain_scale = 0.315
+shader_parameter/medium_scale = 0.263
+shader_parameter/large_scale = -0.001
+shader_parameter/shadow_tint = Color(4.165, 4.165, 4.165, 1)
+shader_parameter/highlight_tint = Color(1.08, 1.08, 1.08, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_43hvp"]
+
+[node name="Node2D" type="Node2D" unique_id=1951313060]
+
+[node name="GridBackground" type="Sprite2D" parent="." unique_id=1485788841]
+material = SubResource("ShaderMaterial_khjcj")
+scale = Vector2(20000, 20000)
+texture = ExtResource("2_7q8md")
+
+[node name="MeshInstance2D2" type="MeshInstance2D" parent="." unique_id=999771218]
+position = Vector2(419, 69)
+scale = Vector2(100, 100)
+mesh = SubResource("QuadMesh_43hvp")
+texture = ExtResource("3_ar2jo")
+
+[node name="Ant" parent="." unique_id=312714327 instance=ExtResource("1_wmnte")]
+position = Vector2(349, 78)

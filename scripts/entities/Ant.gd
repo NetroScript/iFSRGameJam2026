@@ -66,7 +66,7 @@ extends Node2D
 
 var _rng := RandomNumberGenerator.new()
 var rendered_components: Array[Polygon2D]
-var _base_rotations: Dictionary = {}
+var _base_rotations: Dictionary[int, float] = {}
 var _animation_running := false
 var _animation_generation := 0
 var _is_ready := false
@@ -87,11 +87,10 @@ var _legs_data: Array[Dictionary] = []
 func _ready() -> void:
 	_rng.randomize()
 	
-	for child in get_children():
-		if child is Polygon2D:
-			var polygon := child as Polygon2D
-			rendered_components.append(polygon)
-			_base_rotations[polygon] = polygon.rotation
+	for child in find_children("*", "Polygon2D", true, false):
+		var polygon := child as Polygon2D
+		rendered_components.append(polygon)
+		_base_rotations[polygon.get_instance_id()] = polygon.rotation
 			
 	_setup_rendering_rects()
 	_is_ready = true
@@ -153,8 +152,8 @@ func stop_animations() -> void:
 
 
 func _reset_component_rotations() -> void:
-	for component in _base_rotations:
-		component.rotation = _base_rotations[component]
+	for component in rendered_components:
+		component.rotation = _base_rotations[component.get_instance_id()]
 
 
 
@@ -209,7 +208,7 @@ func _update_antenna_animations(delta: float) -> void:
 		state["phase"] = state["phase"] + (delta * TAU * state["speed"] / max(antenna_cycle_duration, 0.01))
 		
 		var antenna: Polygon2D = state["node"]
-		var base_rotation: float = _base_rotations[antenna]
+		var base_rotation: float = _base_rotations[antenna.get_instance_id()]
 		var wave = sin(state["phase"]) + sin(state["phase"] * 2.17) * 0.18 * antenna_independence
 		var offset = deg_to_rad(antenna_rotation * state["amplitude"]) * state["direction"] * wave
 		
@@ -280,8 +279,8 @@ func _ease_in_out(value: float) -> float:
 func _set_mandible_rotation(degrees: float) -> void:
 	var offset = deg_to_rad(degrees)
 	
-	mandible_left.rotation = _base_rotations[mandible_left] + offset
-	mandible_right.rotation = _base_rotations[mandible_right] - offset
+	mandible_left.rotation = _base_rotations[mandible_left.get_instance_id()] + offset
+	mandible_right.rotation = _base_rotations[mandible_right.get_instance_id()] - offset
 
 
 func _setup_leg_animation_state() -> void:
@@ -301,8 +300,8 @@ func _setup_leg_animation_state() -> void:
 func _reset_leg_rotations() -> void:
 	for leg_data in _legs_data:
 		var leg: Polygon2D = leg_data["node"]
-		if _base_rotations.has(leg):
-			leg.rotation = _base_rotations[leg]
+		if _base_rotations.has(leg.get_instance_id()):
+			leg.rotation = _base_rotations[leg.get_instance_id()]
 
 
 func _get_leg_rotation_offset(phase: float, angle_range: Vector2) -> float:
@@ -324,7 +323,7 @@ func _update_leg_animations(delta: float) -> void:
 		var leg: Polygon2D = leg_data["node"]
 		var phase := fmod(_leg_phase + leg_data["phase_offset"], 1.0)
 		var offset : float = _get_leg_rotation_offset(phase, leg_data["angle_range"]) * leg_data["direction"]
-		leg.rotation = _base_rotations[leg] + offset
+		leg.rotation = _base_rotations[leg.get_instance_id()] + offset
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
