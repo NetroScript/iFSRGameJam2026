@@ -51,6 +51,7 @@ texture = ExtResource("2_7q8md")
 position = Vector2(349, 78)
 
 [node name="AntHill" parent="." unique_id=92062608 node_paths=PackedStringArray("world_level") instance=ExtResource("5_8gv0l")]
+drain_rate = 2.0
 world_level = NodePath("..")
 spawn_range = Vector2i(300, 500)
 spawn_distance_range = Vector2i(5, 15)
