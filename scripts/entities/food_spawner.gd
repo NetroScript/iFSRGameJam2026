@@ -38,8 +38,8 @@ func _spawn_resource(spawn_settings: FoodSpawnSettings) -> void:
 
 	for i in spawn_settings.amount:
 		# Calculate spawn position
-		var min_range := world_max_coords.x / 2 * spawn_settings.food.min_range
-		var max_range := world_max_coords.x / 2 * spawn_settings.food.max_range
+		var min_range := float(world_max_coords.x) / 2.0 * spawn_settings.food.min_range
+		var max_range := float(world_max_coords.x) / 2.0 * spawn_settings.food.max_range
 		var spawn_position := _get_random_position_in_ring(Vector2.ZERO, min_range, max_range)
 		# Calculate how many chunks of food it contains
 		var max_chunks = randi_range(spawn_settings.food.chunks_range.x, spawn_settings.food.chunks_range.y)
@@ -58,7 +58,7 @@ func _spawn_resource(spawn_settings: FoodSpawnSettings) -> void:
 		new_food_resource.assign_food(spawn_settings.food, max_chunks, scale_value)
 		add_child(new_food_resource)
 		new_food_resource.global_position = spawn_position
-		push_warning("[%s] Spawned food resource %s at position %s" % [get_path(), new_food_resource.get_path(), str(spawn_position)])
+
 
 
 ## Calculates a random position in a ring (in same coordinates as given parameters)

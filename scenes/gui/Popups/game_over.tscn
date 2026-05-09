@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://dsnuokgigxeq6"]
+
+[ext_resource type="Script" uid="uid://bixs3hbhyaiwx" path="res://scripts/gui/game_over.gd" id="1_vlrvo"]
+
+[node name="GameOver" type="Control" unique_id=724109885]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_vlrvo")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1750209391]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=906784404]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1050458243]
+layout_mode = 2
+size_flags_horizontal = 4
+mouse_filter = 1
+theme_override_font_sizes/font_size = 56
+text = "Game Over"
+
+[node name="Button" type="Button" parent="MarginContainer/VBoxContainer" unique_id=813695408]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 36
+text = "Restart"

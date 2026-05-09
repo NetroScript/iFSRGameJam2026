@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dc2eyfsh83f21" path="res://scripts/sim/WorldLevel.gd" id="1_8gv0l"]
 [ext_resource type="Shader" uid="uid://b3yp6vqctwbqu" path="res://shaders/MapBackground.gdshader" id="1_n80gm"]
+[ext_resource type="PackedScene" uid="uid://dsnuokgigxeq6" path="res://scenes/gui/Popups/game_over.tscn" id="2_1x1s3"]
 [ext_resource type="Texture2D" uid="uid://mfgiul3ckqos" path="res://assets/images/pixel.png" id="2_7q8md"]
 [ext_resource type="PackedScene" uid="uid://b3fgi2u127m3m" path="res://objects/ant_hill/ant_hill.tscn" id="5_8gv0l"]
 [ext_resource type="PackedScene" uid="uid://bvow5th5sfs6k" path="res://scenes/gui/Popups/score_display.tscn" id="6_214bh"]
@@ -82,6 +83,9 @@ target_point_toggle_radius = 100.0
 [node name="ScoreDisplay" parent="CanvasLayer" unique_id=1210247731 instance=ExtResource("6_214bh")]
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="GameOver" parent="CanvasLayer" unique_id=724109885 instance=ExtResource("2_1x1s3")]
+visible = false
 
 [node name="WorldCamera" type="Camera2D" parent="." unique_id=374224128]
 unique_name_in_owner = true
