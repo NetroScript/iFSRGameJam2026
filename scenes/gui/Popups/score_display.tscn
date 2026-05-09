@@ -42,6 +42,18 @@ size_flags_vertical = 0
 theme_override_font_sizes/font_size = 30
 text = "Score: 0"
 
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer" unique_id=714980957]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_531ay")
+theme_override_styles/fill = SubResource("StyleBoxFlat_sopkw")
+value = 85.0
+show_percentage = false
+
 [node name="CaloriesInfoBar" type="HBoxContainer" parent="MarginContainer" unique_id=2088048762]
 layout_mode = 2
 size_flags_vertical = 8
@@ -60,15 +72,3 @@ layout_mode = 2
 size_flags_horizontal = 10
 theme_override_font_sizes/font_size = 30
 text = "Consumed: 0 cal"
-
-[node name="ProgressBar" type="ProgressBar" parent="MarginContainer" unique_id=714980957]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 8
-mouse_filter = 1
-theme_override_styles/background = SubResource("StyleBoxFlat_531ay")
-theme_override_styles/fill = SubResource("StyleBoxFlat_sopkw")
-value = 85.0
-show_percentage = false
