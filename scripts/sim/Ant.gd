@@ -24,7 +24,7 @@ func step(world: World, steering: Vector2) -> Event:
 	else: heading = steering
 
 	if heading == Vector2.ZERO: heading = Vector2.from_angle(randf_range(0, TAU))
-	else: heading = heading.rotated(randfn(0, PI/32))
+	else: heading = heading.rotated(randfn(0, PI/16))
 
 	const THRESH = sin(TAU/16)
 	if   heading.x >  THRESH: pos.x = min(pos.x + 1, world.size.x - 1)
