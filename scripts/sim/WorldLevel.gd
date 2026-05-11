@@ -242,7 +242,17 @@ func _pan_camera_by_screen_delta(screen_delta: Vector2) -> void:
 
 func _zoom_camera(factor: float) -> void:
 	var zoom := clampf(_camera_zoom_value() * factor, _min_camera_zoom_value(), _max_camera_zoom_value())
+
+	# Calculate cursor position in world units relative to view center.
+	var mouse_screen := get_viewport().get_mouse_position() - get_viewport_rect().size * 0.5
+	var mouse_old := mouse_screen / world_camera.zoom
+
 	world_camera.zoom = Vector2(zoom, zoom)
+
+	# Move camera so the cursor's world space position remains fixed → zoom around cursor.
+	var mouse_new := mouse_screen / world_camera.zoom
+	world_camera.global_position += mouse_old - mouse_new
+
 	_clamp_camera_to_world()
 
 
